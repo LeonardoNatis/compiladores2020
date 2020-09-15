@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { Button } from '../../components/Button';
-import '../../components/Button.css';
+import { Button } from '../../React components/Button';
+import '../../React components/Button.css';
 
 import Upload from '../../services/upload';
 
