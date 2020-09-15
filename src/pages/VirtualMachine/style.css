@@ -1,0 +1,52 @@
+.tabela {
+    border: 1px solid;
+    border-color: black;
+}
+  
+.pilha {
+  border: 0px solid;
+  border-color: black;
+  width: 30%;
+}
+.instrucoes {
+  border: 0px solid;
+  border-color: black;
+  width: 70%;
+}
+
+.principal {
+  border: 0px solid;
+  width: 95vw;
+  border-color: black;
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.mainJanelas {
+  display: flex;
+}
+
+.janelas {
+  padding: 5px;
+}
+
+.botao {
+  margin: 10px;
+}
+textarea {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+textarea {
+  padding: 10px;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #999;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
