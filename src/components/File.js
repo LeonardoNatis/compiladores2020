@@ -1,4 +1,4 @@
-class File {
+class myFile {
     /* Construtor da classe Arquivo ==> source é a fonte do arquivo, vulgo o programa todo em string;
     *  fileSize é o tamanho do arquivo;
     *  position é a posição dentro do arquivo;
@@ -80,4 +80,4 @@ class File {
     }
 }
 
-export { File };
+export { myFile };
