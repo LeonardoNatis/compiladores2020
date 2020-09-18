@@ -11,7 +11,7 @@ export default function Compiler() {
     const [code, setCode] = useState([]);
 
     const onChangeFile = (file) => {
-        setCode( file.toString() );
+        setCode( file.toString().replace(/\n/g, '\r\n') );
         // setCode( file.filter(line => line !== '' && line !== null).toString() );
         // setCode( file.split("\n\t").toString() );
         // setCode( file.split("\n\t").filter(line => line !== '' && line !== null).toString() );
@@ -23,10 +23,11 @@ export default function Compiler() {
         
         console.log(code);
         console.log(typeof code);
-        const lexicTokens = analyseLexic(code);
-        console.log(lexicTokens);
-        printTokenList(lexicTokens);
-        
+        // const lexicTokens = analyseLexic(code);
+        // console.log(lexicTokens);
+        // printTokenList(lexicTokens);
+
+        analyseLexic(code);
     }
     
     return (
