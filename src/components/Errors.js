@@ -1,7 +1,7 @@
 // Constante que possui os erros léxicos com qual erro e mensagem de erro correspondente
 const lexicErrors = {
-    INVALID_CHARACTER: 'ERRO LÉXICO: Caracter inválido',
-    UNCLOSED_COMMENT: 'ERRO LÉXICO: Comentário não foi fechado'
+    INVALID_CHARACTER: 'Caracter inválido',
+    UNCLOSED_COMMENT: 'Comentário não foi fechado'
 }
 
 // Constante que possui o erro de arquivo
@@ -9,6 +9,7 @@ const fileErrors = {
     UNEXPECTED_END_OF_FILE: 'ERRO DE ARQUIVO: Fim do arquivo inesperado'
 }
 
+// Classe de erros léxicos, mas decidi não usar
 class lexicError extends Error {
     // Classe específica para erro léxico
     constructor(message, lineNumber) {
@@ -24,6 +25,7 @@ class lexicError extends Error {
     }
 }
 
+// Classe de erros do arquivo, mas decidi não usar
 class fileError extends Error {
     constructor(message, lineNumber) {
         super(lineNumber);
