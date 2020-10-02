@@ -56,6 +56,7 @@ function analyseLexic(file) {
       lexema = lexema.concat(File.getCurChar());
       File.readCurChar();
     }
+    File.dePosition();
     // retorna o caracter e a linha do arquivo, para marcar o token
     console.log("IDENTIFICADOR: [" + lexema + "]");
     return new Token(lexema, File.getCurLine());
@@ -90,6 +91,7 @@ function analyseLexic(file) {
   function treatReltOp(file) {
     // tratamento do operador relacional (< | > | <= | >= | = | !=)
     let lexema = "";
+    lexema = File.getCurChar();
     lexema.concat(File.getCurChar());
     File.readCurChar();
 
@@ -132,6 +134,7 @@ function analyseLexic(file) {
 
       default:
         // erro léxico de caracter inválido
+        console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>deu ruim?");
         tokenList.push({
           errorName: "LexicError",
           errorMessage: lexicErrors.INVALID_CHARACTER,
@@ -141,7 +144,7 @@ function analyseLexic(file) {
     }
 
     if (forceBreak) {
-      return null;
+      return -1;
     } else {
       return new Token(lexema, File.getCurLine());
     }
@@ -180,7 +183,7 @@ function analyseLexic(file) {
         // trata o operador aritmético achando qualquer um dos caracteres do regexp
         recebe = treatAritOp(File);
       } else if (/[\<\>\=\!]/g.test(charr)) {
-        console.log("trata relarional");
+        console.log("trata relacional");
         // trata o operador relacional achando qualquer um dos caracteres do regexp
         recebe = treatReltOp(File);
       } else if (/[\;\,\(\)\.]/g.test(charr)) {
@@ -188,7 +191,9 @@ function analyseLexic(file) {
         // trata a pontuação achando qualquer um dos caracteres do regexp
         recebe = treatPonct();
       } else {
-        console.log("erro");
+        console.log(
+          "=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DEU RUIM PORRA"
+        );
         // senão erro léxico de caracter não reconhecido pela gramática
         tokenList.push({
           errorName: "LexicError",
@@ -208,6 +213,7 @@ function analyseLexic(file) {
   let tot;
   while (!File.endOfFile()) {
     caracter = File.getCurChar();
+
     pos = File.getCurLine();
     tot = File.getFileSize();
     console.log("=======>  INICIO PROGRAMA  <=======");
@@ -247,6 +253,7 @@ function analyseLexic(file) {
         caracter = File.getCurChar();
 
         if (File.endOfFile()) {
+          console.log("entrei aqui?");
           // caso o arquivo acabe antes de fechar o comentário, erro de não fechar comentário
           tokenList.push({
             errorName: "LexicError",
@@ -312,7 +319,11 @@ function analyseLexic(file) {
         }
       }
     }
+    caracter = File.getCurChar();
+    console.log("=>>>>>" + caracter);
     File.readCurChar();
+    caracter = File.getCurChar();
+    console.log("=>>>>>" + caracter);
   }
 
   return tokenList;
