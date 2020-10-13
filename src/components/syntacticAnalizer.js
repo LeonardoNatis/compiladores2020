@@ -6,6 +6,8 @@ import { syntacticErrors } from './Errors';
 function analyzeSyntactic(file) {
     let theFile = file;
     let lexicTokens = analyseLexic(theFile);  // passa por todos os tokens léxicos
+
+    let auxTokenList = lexicTokens;
     let result = [];
 
     // Lexico(Token)
@@ -23,7 +25,7 @@ function analyzeSyntactic(file) {
 
             // se token.simbolo = spontovirgula
             if (currentToken._symbol === tokenSymbols[';']) {
-                analyseBlock();
+                analyzeBlock();
 
                 // se token.simbolo = sponto
                 if (currentToken._symbol === tokenSymbols['.']) {
@@ -75,22 +77,22 @@ function analyzeSyntactic(file) {
         return result;
     }
 
-    function analyseBlock() {
+    function analyzeBlock() {
         currentToken = lexicTokens.shift();
 
-        analyseVariableStage();
-        analyseSubroutines();
-        analyseCommands();
+        analyzeVariableStage();
+        analyzeSubroutines();
+        analyzeCommands();
     }
 
-    function analyseVariableStage() {
+    function analyzeVariableStage() {
         if (currentToken._symbol === tokenSymbols['var']) {
             currentToken = lexicTokens.shift();
 
             if (currentToken._symbol === tokenSymbols['identificador']) {
 
                 while (currentToken._symbol === tokenSymbols['identificador']) {
-                    analyseVariableDeclaration();
+                    analyzeVariableDeclaration();
 
                     if (currentToken._symbol === tokenSymbols[';']) {
                         currentToken = lexicTokens.shift();
@@ -116,7 +118,7 @@ function analyzeSyntactic(file) {
         }
     }
 
-    function analyseVariableDeclaration() {
+    function analyzeVariableDeclaration() {
         do {
 
             if (currentToken._symbol === tokenSymbols['identificador']) {
@@ -158,10 +160,10 @@ function analyzeSyntactic(file) {
         } while (currentToken._symbol === tokenSymbols[':']);
 
         currentToken = lexicTokens.shift();
-        analyseType();
+        analyzeType();
     }
 
-    function analyseType() {
+    function analyzeType() {
         if (currentToken._symbol !== tokenSymbols['inteiro'] || currentToken._symbol !== tokenSymbols['booleano']) {
             result.push({
                 errorName: "SyntacticError",
@@ -174,11 +176,11 @@ function analyzeSyntactic(file) {
         currentToken = lexicTokens.shift();
     }
 
-    function analyseCommands() {
+    function analyzeCommands() {
         if (currentToken._symbol === tokenSymbols['inicio']) {
             currentToken = lexicTokens.shift();
 
-            analyseSimpleCommand();
+            analyzeSimpleCommand();
 
             while (currentToken._symbol !== tokenSymbols['fim']) {
                 if (currentToken._symbol === tokenSymbols[';']) {
@@ -186,7 +188,7 @@ function analyzeSyntactic(file) {
                     currentToken = lexicTokens.shift();
 
                     if (currentToken._symbol !== tokenSymbols['fim']) {
-                        analyseSimpleCommand();
+                        analyzeSimpleCommand();
                     }
 
                 } else {
@@ -195,6 +197,7 @@ function analyzeSyntactic(file) {
                         errorMessage: syntacticErrors.NOT_A_STATEMENT,
                         errorLine: theFile.getCurLine()
                     });
+                    return result;
                 }
             }
 
@@ -210,12 +213,210 @@ function analyzeSyntactic(file) {
         }
     }
 
-    function analyseSimpleCommand() {
-
+    function analyzeSimpleCommand() {
+        if (currentToken._symbol === tokenSymbols['identificador']) {
+            analyzeAttributionProcedureCall();
+        } else if (currentToken._symbol === tokenSymbols['se']) {
+            analyzeIf();
+        } else if (currentToken._symbol === tokenSymbols['enquanto']) {
+            analyzeWhile();
+        } else if (currentToken._symbol === tokenSymbols['leia']) {
+            analyzeRead();
+        } else if (currentToken._symbol === tokenSymbols['escreva']) {
+            analyzeWrite();
+        } else {
+            analyzeCommands();
+        }
     }
 
-    function analyseSubroutines() {
+    function analyzeAttributionProcedureCall() {
+        currentToken = lexicTokens.shift();
 
+        if (currentToken._symbol === tokenSymbols[':=']) {
+            analyzeAttribution();
+        } else {
+            analyzeProcedureCall();
+        }
+    }
+
+    function analyzeRead() {
+        currentToken = lexicTokens.shift();
+
+        if (currentToken._symbol === tokenSymbols['(']) {
+            currentToken = lexicTokens.shift();
+
+            if (currentToken._symbol === tokenSymbols['identificador']) {
+                currentToken = lexicTokens.shift();
+                
+                if (currentToken._symbol === tokenSymbols[')']) {
+                    currentToken = lexicTokens.shift();
+                } else {
+                    result.push({
+                        errorName: "SyntacticError",
+                        errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
+                        errorLine: theFile.getCurLine()
+                    });
+                    return result;
+                }
+            } else {
+                result.push({
+                    errorName: "SyntacticError",
+                    errorMessage: syntacticErrors.INVALID_READ_COMMAND,
+                    errorLine: theFile.getCurLine()
+                });
+                return result;
+            }
+        } else {
+            result.push({
+                errorName: "SyntacticError",
+                errorMessage: syntacticErrors.EXPECTING_OPEN_PARENTHESIS,
+                errorLine: theFile.getCurLine()
+            });
+            return result;
+        }
+    }
+
+    function analyzeWrite() {
+        currentToken = lexicTokens.shift();
+
+        if (currentToken._symbol === tokenSymbols['(']) {
+            currentToken = lexicTokens.shift();
+
+            if (currentToken._symbol === tokenSymbols['identificador']) {
+                currentToken = lexicTokens.shift();
+                
+                if (currentToken._symbol === tokenSymbols[')']) {
+                    currentToken = lexicTokens.shift();
+                } else {
+                    result.push({
+                        errorName: "SyntacticError",
+                        errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
+                        errorLine: theFile.getCurLine()
+                    });
+                    return result;
+                }
+            } else {
+                result.push({
+                    errorName: "SyntacticError",
+                    errorMessage: syntacticErrors.INVALID_READ_COMMAND,
+                    errorLine: theFile.getCurLine()
+                });
+                return result;
+            }
+        } else {
+            result.push({
+                errorName: "SyntacticError",
+                errorMessage: syntacticErrors.EXPECTING_OPEN_PARENTHESIS,
+                errorLine: theFile.getCurLine()
+            });
+            return result;
+        }
+    }
+
+    function analyzeWhile() {
+        currentToken = lexicTokens.shift();
+
+        analyzeExpression();
+
+        if (currentToken._symbol === tokenSymbols['faca']) {
+            currentToken = lexicTokens.shift();
+
+            analyzeSimpleCommand();
+        } else {
+            result.push({
+                errorName: "SyntacticError",
+                errorMessage: syntacticErrors.EXPECTING_FAÇA_TOKEN,
+                errorLine: theFile.getCurLine()
+            });
+            return result;
+        }
+    }
+
+    function analyzeIf() {
+        currentToken = lexicTokens.shift();
+
+        analyzeExpression();
+
+        if (currentToken._symbol === tokenSymbols['entao']) {
+            currentToken = lexicTokens.shift();
+
+            analyzeSimpleCommand();
+
+            if (currentToken._symbol === tokenSymbols['senao']) {
+                currentToken = lexicTokens.shift();
+
+                analyzeSimpleCommand();
+            }
+        } else {
+            result.push({
+                errorName: "SyntacticError",
+                errorMessage: syntacticErrors.EXPECTING_ENTAO_TOKEN,
+                errorLine: theFile.getCurLine()
+            });
+            return result;
+        }
+    }
+
+    function analyzeSubroutines() {
+        let flag = 0;
+
+        if (currentToken._symbol === tokenSymbols['procedimento'] || currentToken._symbol === tokenSymbols['funcao']) {
+            // TODO: Code generating
+            flag = 1;
+        }
+
+        while (currentToken._symbol === tokenSymbols['procedimento'] || currentToken._symbol === tokenSymbols['funcao']) {
+            if (currentToken._symbol === tokenSymbols['procedimento']) {
+                analyzeProcedureDeclaration();
+            } else {
+                analyzeFunctionDeclaration();
+            }
+
+            if (currentToken._symbol === tokenSymbols[';']) {
+                currentToken = lexicTokens.shift();
+            } else {
+                result.push({
+                    errorName: "SyntacticError",
+                    errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
+                    errorLine: theFile.getCurLine()
+                });
+                return result;
+            }
+
+            if (flag === 1) {
+                // TODO: Code generating
+            }
+        }
+    }
+
+    function analyzeProcedureDeclaration() {
+        currentToken = lexicTokens.shift();
+
+        if (currentToken._symbol === tokenSymbols['identificador']) {
+            currentToken = lexicTokens.shift();
+
+            if (currentToken._symbol === tokenSymbols[';']) {
+                analyzeBlock();
+            } else {
+                result.push({
+                    errorName: "SyntacticError",
+                    errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
+                    errorLine: theFile.getCurLine()
+                });
+                return result;    
+            }
+        } else {
+            result.push({
+                errorName: "SyntacticError",
+                errorMessage: syntacticErrors.INVALID_PROCEDURE_DECLARATION,
+                errorLine: theFile.getCurLine()
+            });
+            return result;
+        }
+    }
+
+    function analyzeFunctionDeclaration() {
+        
     }
 
     return result;
