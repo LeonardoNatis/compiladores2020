@@ -11,7 +11,7 @@ function printTokenList(tokenList) {
         }  |  Linha: ${token._line} `
       );
     } else {
-      console.log(`${token.errorName}: ${token.errorMessage}`);
+        console.log(`${token.errorName}: ${token.errorMessage}`);
     }
   }
 }
@@ -22,7 +22,7 @@ function analyseLexic(file) {
   let count = 0;
   let caracter;
   let auxLacoComentario;
-  const File = new myFile(file, file.length, 0, 0, " ");
+  const File = file;
 
   function treatDigits(file) {
     // faz tratamento dos dígitos, coloca primeiro número na variável local lexema
@@ -95,9 +95,7 @@ function analyseLexic(file) {
     lexema.concat(File.getCurChar());
     File.readCurChar();
 
-    switch (
-      lexema // verifica em qual caso o caracter atual se enquadra
-    ) {
+    switch ( lexema ) { // verifica em qual caso o caracter atual se enquadra
       case "<":
         if (File.getCurChar() === "=") {
           // se próximo caracter for um igual, trata o menor ou igual (<=)
@@ -276,7 +274,17 @@ function analyseLexic(file) {
               if (caracter === "/") {
                 auxLacoComentario = false;
               }
-            }
+            } 
+            // else {
+            //     tokenList.push({
+            //         errorName: "LexicError",
+            //         errorMessage: lexicErrors.UNCLOSED_COMMENT,
+            //     });
+            //     File.getCurLine();
+            //     auxLacoComentario = false;
+            // }
+
+
             if (File.endOfFile()) {
               // caso o arquivo acabe antes de fechar o comentário, erro de não fechar comentário
               tokenList.push({
@@ -287,8 +295,16 @@ function analyseLexic(file) {
               auxLacoComentario = false;
             }
           }
+        } else {
+            tokenList.push({
+                errorName: "LexicError",
+                errorMessage: lexicErrors.UNCLOSED_COMMENT,
+            });
+            File.getCurLine();
+            auxLacoComentario = false;
         }
       }
+      
       File.readCurChar();
       caracter = File.getCurChar();
       while (

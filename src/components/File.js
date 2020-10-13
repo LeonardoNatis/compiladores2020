@@ -69,9 +69,11 @@ class myFile {
   incrPosition() {
     this._position++;
   }
+
   dePosition() {
     this._position--;
   }
+  
   incrCurLine() {
     this._curLine++;
   }
