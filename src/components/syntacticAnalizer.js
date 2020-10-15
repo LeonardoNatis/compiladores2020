@@ -36,16 +36,18 @@ function analyzeSyntactic(file) {
                         result.push({
                             errorName: "SyntacticError",
                             errorMessage: syntacticErrors.UNEXPECTED_CHARACTER,
-                            errorLine: theFile.getCurLine()
+                            errorLine: currentToken._line
                         });
                         return result;
                     }
+
+                    // falta verificar array de tokens do léxico e imprimir erro no caso do Sintático todo estar OK
 
                 } else { // senão ERRO -> faltando token ponto
                     result.push({
                         errorName: "SyntacticError",
                         errorMessage: syntacticErrors.EXPECTING_DOT,
-                        errorLine: theFile.getCurLine()
+                        errorLine: currentToken._line
                     });
                     return result;
                 }
@@ -54,7 +56,7 @@ function analyzeSyntactic(file) {
                 result.push({
                     errorName: "SyntacticError",
                     errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
-                    errorLine: theFile.getCurLine()
+                    errorLine: currentToken._line
                 });
                 return result;
             }
@@ -63,7 +65,7 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.MISSING_PROGRAM_NAME,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
@@ -72,7 +74,7 @@ function analyzeSyntactic(file) {
         result.push({
             errorName: "SyntacticError",
             errorMessage: syntacticErrors.MISSING_PROGRAM_TOKEN,
-            errorLine: theFile.getCurLine()
+            errorLine: currentToken._line
         });
         return result;
     }
@@ -100,7 +102,7 @@ function analyzeSyntactic(file) {
                         result.push({
                             errorName: "SyntacticError",
                             errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
-                            errorLine: theFile.getCurLine()
+                            errorLine: currentToken._line
                         });
                         return result;
                     }
@@ -111,7 +113,7 @@ function analyzeSyntactic(file) {
                 result.push({
                     errorName: "SyntacticError",
                     errorMessage: syntacticErrors.INVALID_VARIABLE_NAME,
-                    errorLine: theFile.getCurLine()
+                    errorLine: currentToken._line
                 });
                 return result;
             }
@@ -133,7 +135,7 @@ function analyzeSyntactic(file) {
                             result.push({
                                 errorName: "SyntacticError",
                                 errorMessage: syntacticErrors.INVALID_VARIABLE_DECLARATION,
-                                errorLine: theFile.getCurLine()
+                                errorLine: currentToken._line
                             });
                             return result;
                         }
@@ -143,7 +145,7 @@ function analyzeSyntactic(file) {
                     result.push({
                         errorName: "SyntacticError",
                         errorMessage: syntacticErrors.INVALID_VARIABLE_DECLARATION,
-                        errorLine: theFile.getCurLine()
+                        errorLine: currentToken._line
                     });
                     return result;
                 }
@@ -152,7 +154,7 @@ function analyzeSyntactic(file) {
                 result.push({
                     errorName: "SyntacticError",
                     errorMessage: syntacticErrors.INVALID_VARIABLE_NAME,
-                    errorLine: theFile.getCurLine()
+                    errorLine: currentToken._line
                 });
                 return result;
             }
@@ -168,7 +170,7 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.INVALID_DATA_TYPE,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
@@ -195,7 +197,7 @@ function analyzeSyntactic(file) {
                     result.push({
                         errorName: "SyntacticError",
                         errorMessage: syntacticErrors.NOT_A_STATEMENT,
-                        errorLine: theFile.getCurLine()
+                        errorLine: currentToken._line
                     });
                     return result;
                 }
@@ -207,7 +209,7 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.UNEXPECTED_CHARACTER,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
@@ -254,7 +256,7 @@ function analyzeSyntactic(file) {
                     result.push({
                         errorName: "SyntacticError",
                         errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
-                        errorLine: theFile.getCurLine()
+                        errorLine: currentToken._line
                     });
                     return result;
                 }
@@ -262,7 +264,7 @@ function analyzeSyntactic(file) {
                 result.push({
                     errorName: "SyntacticError",
                     errorMessage: syntacticErrors.INVALID_READ_COMMAND,
-                    errorLine: theFile.getCurLine()
+                    errorLine: currentToken._line
                 });
                 return result;
             }
@@ -270,7 +272,7 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.EXPECTING_OPEN_PARENTHESIS,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
@@ -291,7 +293,7 @@ function analyzeSyntactic(file) {
                     result.push({
                         errorName: "SyntacticError",
                         errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
-                        errorLine: theFile.getCurLine()
+                        errorLine: currentToken._line
                     });
                     return result;
                 }
@@ -299,7 +301,7 @@ function analyzeSyntactic(file) {
                 result.push({
                     errorName: "SyntacticError",
                     errorMessage: syntacticErrors.INVALID_READ_COMMAND,
-                    errorLine: theFile.getCurLine()
+                    errorLine: currentToken._line
                 });
                 return result;
             }
@@ -307,7 +309,7 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.EXPECTING_OPEN_PARENTHESIS,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
@@ -326,7 +328,7 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.EXPECTING_FAÇA_TOKEN,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
@@ -351,7 +353,7 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.EXPECTING_ENTAO_TOKEN,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
@@ -378,7 +380,7 @@ function analyzeSyntactic(file) {
                 result.push({
                     errorName: "SyntacticError",
                     errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
-                    errorLine: theFile.getCurLine()
+                    errorLine: currentToken._line
                 });
                 return result;
             }
@@ -401,7 +403,7 @@ function analyzeSyntactic(file) {
                 result.push({
                     errorName: "SyntacticError",
                     errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
-                    errorLine: theFile.getCurLine()
+                    errorLine: currentToken._line
                 });
                 return result;    
             }
@@ -409,14 +411,144 @@ function analyzeSyntactic(file) {
             result.push({
                 errorName: "SyntacticError",
                 errorMessage: syntacticErrors.INVALID_PROCEDURE_DECLARATION,
-                errorLine: theFile.getCurLine()
+                errorLine: currentToken._line
             });
             return result;
         }
     }
 
     function analyzeFunctionDeclaration() {
+        currentToken = lexicTokens.shift();
+
+        if (currentToken._symbol === tokenSymbols['identificador']) {
+            currentToken = lexicTokens.shift();
+
+            if (currentToken._symbol === tokenSymbols[':']) {
+                currentToken = lexicTokens.shift();
+
+                if (currentToken._symbol === tokenSymbols['inteiro'] || currentToken._symbol === tokenSymbols['booleano']) {
+                    currentToken = lexicTokens.shift();
+
+                    if (currentToken._symbol === tokenSymbols[';']) {
+                        analyzeBlock();
+                    }
+                } else {
+                    result.push({
+                        errorName: "SyntacticError",
+                        errorMessage: syntacticErrors.INVALID_FUNCTION_DECLARATION,
+                        errorLine: currentToken._line
+                    });
+                    return result;
+                }
+            } else {
+                result.push({
+                    errorName: "SyntacticError",
+                    errorMessage: syntacticErrors.EXPECTING_COLON,
+                    errorLine: currentToken._line
+                });
+                return result;
+            }
+        } else {
+            result.push({
+                errorName: "SyntacticError",
+                errorMessage: syntacticErrors.INVALID_FUNCTION_DECLARATION,
+                errorLine: currentToken._line
+            });
+            return result;
+        }
+    }
+
+    function analyzeExpression() {
+        analyzeSimpleExpression();
         
+        let operatorsRegex = /smaior|smaior|smaiorig|sig|smenor|smenorig|sdif/g;
+        if (currentToken._symbol.match(operatorsRegex)) {
+            currentToken = lexicTokens.shift();
+
+            analyzeSimpleExpression();
+        }
+    }
+
+    function analyzeSimpleExpression() {
+        if (currentToken._symbol === tokenSymbols['<'] || currentToken._symbol === tokenSymbols['>']) {
+            currentToken = lexicTokens.shift();
+
+            analyzeTerm();
+
+            while (currentToken._symbol === tokenSymbols['<'] || currentToken._symbol === tokenSymbols['>'] || currentToken._symbol === tokenSymbols['ou']) {
+                currentToken = lexicTokens.shift();
+
+                analyzeTerm();
+            }
+        }
+    }
+
+    function analyzeTerm() {
+        analyzeFactor();
+
+        while (currentToken._symbol === tokenSymbols['*'] || currentToken._symbol === tokenSymbols['div'] || currentToken._symbol === tokenSymbols['e']) {
+            currentToken = lexicTokens.shift();
+            
+            analyzeFactor();
+        }
+    }
+
+    function analyzeFactor() {
+        if (currentToken._symbol === tokenSymbols['identificador']) {
+            analyzeFunctionCall();
+            // TODO: Semantic analysis (variables and function)
+
+        } else {
+            if (currentToken._symbol === tokenSymbols['numero']) {
+                currentToken = lexicTokens.shift();
+            } else {
+                if (currentToken._symbol === tokenSymbols['nao']) {
+                    currentToken = lexicTokens.shift();
+                    analyzeFactor();
+                } else {
+                    if (currentToken._symbol === tokenSymbols['(']) {
+                        currentToken = lexicTokens.shift();
+                        
+                        analyzeExpression();
+
+                        if (currentToken._symbol === tokenSymbols[')']) {
+                            currentToken = lexicTokens.shift();
+                        } else {
+                            result.push({
+                                errorName: "SyntacticError",
+                                errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
+                                errorLine: currentToken._line
+                            });
+                            return result;
+                        }
+                    } else {
+                        if (currentToken._symbol === tokenSymbols['verdadeiro'] || currentToken._symbol === tokenSymbols['falso']) {
+                            currentToken = lexicTokens.shift();
+                        } else {
+                            result.push({
+                                errorName: "SyntacticError",
+                                errorMessage: syntacticErrors.INVALID_EXPRESSION ,
+                                errorLine: currentToken._line
+                            });
+                            return result;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function analyzeAttribution() {
+        // Não precisa tratar separado, pode ser tratado como uma expressão, sintaticamente falando
+        analyzeExpression();
+    }
+
+    function analyzeProcedureCall() {
+        // Não precisa de nada no Sintático
+    }
+
+    function analyzeFunctionCall() {
+        currentToken = lexicTokens.shift();
     }
 
     return result;
