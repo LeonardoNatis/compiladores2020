@@ -18,7 +18,7 @@ const tokenSymbols = {
     inteiro: 'sinteiro',
     booleano: 'sbooleano',
     verdadeiro: 'sverdadeiro',
-    false: 'sfalso',
+    falso: 'sfalso',
     identificador: 'sidentificador',
     numero: 'snumero',
     '.': 'sponto',
