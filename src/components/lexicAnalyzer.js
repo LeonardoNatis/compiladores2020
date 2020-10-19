@@ -11,7 +11,7 @@ function printTokenList(tokenList) {
         }  |  Linha: ${token._line} `
       );
     } else {
-        console.log(`${token.errorName}: ${token.errorMessage}`);
+      console.log(`${token.errorName}: ${token.errorMessage}`);
     }
   }
 }
@@ -34,10 +34,9 @@ function analyseLexic(file) {
     while (/[0-9]/g.test(File.getCurChar())) {
       // enquanto continuar testando o regexp para um dígito, concatena o caracter no lexema
       lexema = lexema.concat(File.getCurChar());
-      console.log("lexema" + lexema);
       File.readCurChar();
     }
-
+    File.dePosition();
     return new Token(lexema, File.getCurLine()); // retorna o caracter e a linha do arquivo, para marcar o token;
   }
 
@@ -58,7 +57,6 @@ function analyseLexic(file) {
     }
     File.dePosition();
     // retorna o caracter e a linha do arquivo, para marcar o token
-    console.log("IDENTIFICADOR: [" + lexema + "]");
     return new Token(lexema, File.getCurLine());
   }
 
@@ -74,6 +72,7 @@ function analyseLexic(file) {
       lexema = lexema.concat(File.getCurChar());
       File.readCurChar();
     }
+    File.dePosition();
     // retorna o caracter e a linha do arquivo, para marcar o token
     return new Token(lexema, File.getCurLine());
   }
@@ -84,8 +83,8 @@ function analyseLexic(file) {
     lexema = File.getCurChar();
     lexema.concat(File.getCurChar());
     File.readCurChar();
-    new Token(lexema, File.getCurLine());
-    return lexema;
+    File.dePosition();
+    return new Token(lexema, File.getCurLine());
   }
 
   function treatReltOp(file) {
@@ -95,7 +94,9 @@ function analyseLexic(file) {
     lexema.concat(File.getCurChar());
     File.readCurChar();
 
-    switch ( lexema ) { // verifica em qual caso o caracter atual se enquadra
+    switch (
+      lexema // verifica em qual caso o caracter atual se enquadra
+    ) {
       case "<":
         if (File.getCurChar() === "=") {
           // se próximo caracter for um igual, trata o menor ou igual (<=)
@@ -132,7 +133,6 @@ function analyseLexic(file) {
 
       default:
         // erro léxico de caracter inválido
-        console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>deu ruim?");
         tokenList.push({
           errorName: "LexicError",
           errorMessage: lexicErrors.INVALID_CHARACTER,
@@ -144,6 +144,7 @@ function analyseLexic(file) {
     if (forceBreak) {
       return -1;
     } else {
+      File.dePosition();
       return new Token(lexema, File.getCurLine());
     }
   }
@@ -154,44 +155,33 @@ function analyseLexic(file) {
     lexema = File.getCurChar();
     lexema.concat(File.getCurChar());
     File.readCurChar();
-
+    File.dePosition();
     return new Token(lexema, File.getCurLine());
   }
 
   function getToken(file) {
     const charr = File.getCurChar();
     let recebe;
-    console.log("TOKEN: ===[" + charr + "]");
     while (forceBreak === false) {
       if (/[0-9]/g.test(charr)) {
-        console.log("trata digito");
         // trata dígito achando qualquer um dos caracteres do regexp
         recebe = treatDigits(File);
       } else if (/[A-Za-z_]/g.test(charr)) {
-        console.log("trata indentificador");
         // trata identificador ou palavra reservada achando qualquer um dos caracteres do regexp
         recebe = treatIdentifierOrReservedWord(File);
-        console.log("=>>>>>>>>>>>" + recebe);
       } else if (charr === ":") {
-        console.log("trata atribuição");
         // trata atribuição quando achar dois pontos
         recebe = treatAttribution();
       } else if (/[\+\-\*]/g.test(charr)) {
-        console.log("trata operador");
         // trata o operador aritmético achando qualquer um dos caracteres do regexp
         recebe = treatAritOp(File);
       } else if (/[\<\>\=\!]/g.test(charr)) {
-        console.log("trata relacional");
         // trata o operador relacional achando qualquer um dos caracteres do regexp
         recebe = treatReltOp(File);
       } else if (/[\;\,\(\)\.]/g.test(charr)) {
-        console.log("trata pontuação");
         // trata a pontuação achando qualquer um dos caracteres do regexp
         recebe = treatPonct();
       } else {
-        console.log(
-          "=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DEU RUIM PORRA"
-        );
         // senão erro léxico de caracter não reconhecido pela gramática
         tokenList.push({
           errorName: "LexicError",
@@ -214,17 +204,7 @@ function analyseLexic(file) {
 
     pos = File.getCurLine();
     tot = File.getFileSize();
-    console.log("=======>  INICIO PROGRAMA  <=======");
-    console.log(
-      "CARACTER: [" +
-        caracter +
-        "] POSICAO: [" +
-        pos +
-        "] TAMANHO TOTAL: [" +
-        tot +
-        "] FORCEBREAK: " +
-        forceBreak
-    );
+    // console.log("=======>  INICIO PROGRAMA  <=======");
     while (
       (caracter === "{" ||
         caracter === "/" || // Comentários
@@ -235,23 +215,19 @@ function analyseLexic(file) {
       !File.endOfFile() &&
       !forceBreak
     ) {
-      console.log(
-        "CARACTER: [" + caracter + "] FORCEBRAK: [" + forceBreak + "]"
-      );
-
       // fim do arquivo ou break forçado em caso de erro
       if (caracter === "{") {
         // tratando comentário com chaves
         while (caracter !== "}" && !File.endOfFile()) {
           File.readCurChar();
           caracter = File.getCurChar();
+          console.log("Entrou aqui");
         }
 
         File.readCurChar();
         caracter = File.getCurChar();
 
         if (File.endOfFile()) {
-          console.log("entrei aqui?");
           // caso o arquivo acabe antes de fechar o comentário, erro de não fechar comentário
           tokenList.push({
             errorName: "LexicError",
@@ -274,7 +250,7 @@ function analyseLexic(file) {
               if (caracter === "/") {
                 auxLacoComentario = false;
               }
-            } 
+            }
             // else {
             //     tokenList.push({
             //         errorName: "LexicError",
@@ -283,7 +259,6 @@ function analyseLexic(file) {
             //     File.getCurLine();
             //     auxLacoComentario = false;
             // }
-
 
             if (File.endOfFile()) {
               // caso o arquivo acabe antes de fechar o comentário, erro de não fechar comentário
@@ -296,15 +271,15 @@ function analyseLexic(file) {
             }
           }
         } else {
-            tokenList.push({
-                errorName: "LexicError",
-                errorMessage: lexicErrors.UNCLOSED_COMMENT,
-            });
-            File.getCurLine();
-            auxLacoComentario = false;
+          tokenList.push({
+            errorName: "LexicError",
+            errorMessage: lexicErrors.UNCLOSED_COMMENT,
+          });
+          File.getCurLine();
+          auxLacoComentario = false;
         }
       }
-      
+
       File.readCurChar();
       caracter = File.getCurChar();
       while (
@@ -320,26 +295,24 @@ function analyseLexic(file) {
     }
 
     if (!File.endOfFile()) {
-      console.log("=======>  PEGAR TOKEN  <=======");
       let curToken = getToken(File);
-      console.log("LEXEMA: [" + curToken + "]");
+      console.log("TOKEN:", curToken);
       forceBreak = false;
 
       if (!forceBreak) {
         tokenList.push(curToken);
+        caracter = File.getCurChar();
+
+        File.readCurChar();
+        caracter = File.getCurChar();
+        return tokenList;
       }
       if (curToken === -1) {
-        console.log("ERRO");
         while (!File.endOfFile()) {
           File.readCurChar();
         }
       }
     }
-    caracter = File.getCurChar();
-    console.log("=>>>>>" + caracter);
-    File.readCurChar();
-    caracter = File.getCurChar();
-    console.log("=>>>>>" + caracter);
   }
 
   return tokenList;
