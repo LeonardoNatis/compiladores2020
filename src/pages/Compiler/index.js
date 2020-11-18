@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 
+import { Editor } from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+
 import { Button } from "../../React components/Button";
 import "../../React components/Button.css";
 
@@ -9,6 +14,7 @@ import { analyseLexic, printTokenList } from "../../components/lexicAnalyzer";
 import { myFile } from "../../components/File";
 // import { lexicTest } from '../../components/lexicTest';
 import { analyzeSyntactic } from "../../components/syntacticAnalizer";
+import Teste from "../../React components/Teste/Teste";
 
 export default function Compiler() {
   const [code, setCode] = useState([]);
@@ -30,6 +36,9 @@ export default function Compiler() {
   return (
     <>
       <h1>Compiler</h1>
+      <br />
+      <br />
+      <Teste />
       <br />
       <Button>
         <Upload onChangefile={onChangeFile} />
