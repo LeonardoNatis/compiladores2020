@@ -16,7 +16,7 @@ function printTokenList(tokenList) {
   }
 }
 
-function analyseLexic(file) {
+function analyseLexic(file)  {
   const tokenList = [];
   let forceBreak = false;
   let count = 0;
@@ -142,7 +142,7 @@ function analyseLexic(file) {
     }
 
     if (forceBreak) {
-      return -1;
+      return tokenList;
     } else {
       File.dePosition();
       return new Token(lexema, File.getCurLine());
@@ -188,7 +188,7 @@ function analyseLexic(file) {
           errorMessage: lexicErrors.INVALID_CHARACTER,
         });
         forceBreak = true;
-        return (recebe = -1);
+        return tokenList;
       }
       if (recebe) {
         forceBreak = true;
@@ -251,14 +251,7 @@ function analyseLexic(file) {
                 auxLacoComentario = false;
               }
             }
-            // else {
-            //     tokenList.push({
-            //         errorName: "LexicError",
-            //         errorMessage: lexicErrors.UNCLOSED_COMMENT,
-            //     });
-            //     File.getCurLine();
-            //     auxLacoComentario = false;
-            // }
+
 
             if (File.endOfFile()) {
               // caso o arquivo acabe antes de fechar o comentário, erro de não fechar comentário
@@ -299,18 +292,22 @@ function analyseLexic(file) {
       console.log("TOKEN:", curToken);
       forceBreak = false;
 
+      if (curToken[0] && curToken[0].errorName === "LexicError") {
+        console.log("Entrei aqui");
+        while (!File.endOfFile()) {
+          File.readCurChar();   
+        }
+        throw curToken;
+      }
+
       if (!forceBreak) {
+        console.log("to aqui?")
         tokenList.push(curToken);
         caracter = File.getCurChar();
 
         File.readCurChar();
         caracter = File.getCurChar();
         return tokenList;
-      }
-      if (curToken === -1) {
-        while (!File.endOfFile()) {
-          File.readCurChar();
-        }
       }
     }
   }

@@ -3,7 +3,7 @@ import { Token, tokenSymbols } from "./Token";
 import { analyseLexic } from "./lexicAnalyzer";
 import { syntacticErrors } from "./Errors";
 
-function analyzeSyntactic(file) {
+function analyzeSyntactic(file)  {
   let theFile = file;
   let currentToken = analyseLexic(theFile);
   let result = [];
@@ -16,7 +16,7 @@ function analyzeSyntactic(file) {
 
     // se token.simbolo = sidentificador
     if (currentToken[0]._symbol === tokenSymbols["identificador"]) {
-      // Lexico(Token)
+
       currentToken = analyseLexic(theFile);
 
       // se token.simbolo = spontovirgula
@@ -26,15 +26,16 @@ function analyzeSyntactic(file) {
         // se token.simbolo = sponto
         if (currentToken[0]._symbol === tokenSymbols["."]) {
           // se fim do arquivo ou é comentário
-
-          if (currentToken[0]._symbol) {
+          currentToken = analyseLexic(theFile);
+          if (currentToken.length > 0) {
             result.push({
               errorName: "SyntacticError",
               errorMessage: syntacticErrors.UNEXPECTED_CHARACTER,
               errorLine: currentToken[0]._line,
             });
+            
             console.log(result);
-            return result;
+            throw result;
           }
           console.log("sucesso");
           // falta verificar array de tokens do léxico e imprimir erro no caso do Sintático todo estar OK
@@ -46,7 +47,7 @@ function analyzeSyntactic(file) {
             errorLine: currentToken[0]._line,
           });
           console.log(result);
-          return result;
+          throw result;
         }
       } else {
         // senão ERRO -> faltando token ponto e vírgula
@@ -56,7 +57,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
     } else {
       // senão ERRO -> faltando nome do programa
@@ -66,7 +67,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   } else {
     // senão ERRO -> faltando token programa
@@ -76,7 +77,7 @@ function analyzeSyntactic(file) {
       errorLine: currentToken[0]._line,
     });
     console.log(result);
-    return result;
+    throw result;
   }
   //ok
   function analyzeBlock() {
@@ -106,7 +107,7 @@ function analyzeSyntactic(file) {
               errorLine: currentToken[0]._line,
             });
             console.log(result);
-            return result;
+            throw result;
           }
         }
       } else {
@@ -116,7 +117,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
     }
   }
@@ -142,7 +143,7 @@ function analyzeSyntactic(file) {
               });
 
               console.log(result);
-              return result;
+              throw result;
             }
           }
         } else {
@@ -152,7 +153,7 @@ function analyzeSyntactic(file) {
             errorLine: currentToken[0]._line,
           });
           console.log(result);
-          return result;
+          throw result;
         }
       } else {
         result.push({
@@ -161,7 +162,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
     } while (currentToken[0]._symbol != tokenSymbols[":"]);
 
@@ -182,7 +183,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }else{
       currentToken = analyseLexic(theFile);
     }
@@ -210,7 +211,7 @@ function analyzeSyntactic(file) {
             errorLine: currentToken[0]._line,
           });
           console.log(result);
-          return result;
+          throw result;
         }
       }
 
@@ -222,7 +223,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   }
   //ok
@@ -273,7 +274,7 @@ function analyzeSyntactic(file) {
             errorLine: currentToken[0]._line,
           });
           console.log(result);
-          return result;
+          throw result;
         }
       } else {
         result.push({
@@ -282,7 +283,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
     } else {
       result.push({
@@ -291,7 +292,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   }
   //ok
@@ -313,7 +314,7 @@ function analyzeSyntactic(file) {
             errorLine: currentToken[0]._line,
           });
           console.log(result);
-          return result;
+          throw result;
         }
       } else {
         result.push({
@@ -322,7 +323,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
     } else {
       result.push({
@@ -331,7 +332,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   }
   //ok
@@ -350,7 +351,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   
   }
@@ -377,7 +378,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   }
   //ok
@@ -412,7 +413,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
 
       if (flag === 1) {
@@ -437,7 +438,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
     } else {
       result.push({
@@ -446,7 +447,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   }
   //ok
@@ -475,7 +476,7 @@ function analyzeSyntactic(file) {
             errorLine: currentToken[0]._line,
           });
           console.log(result);
-          return result;
+          throw result;
         }
       } else {
         result.push({
@@ -484,7 +485,7 @@ function analyzeSyntactic(file) {
           errorLine: currentToken[0]._line,
         });
         console.log(result);
-        return result;
+        throw result;
       }
     } else {
       result.push({
@@ -493,7 +494,7 @@ function analyzeSyntactic(file) {
         errorLine: currentToken[0]._line,
       });
       console.log(result);
-      return result;
+      throw result;
     }
   }
   //ok
@@ -518,8 +519,7 @@ function analyzeSyntactic(file) {
     ) {
         currentToken = analyseLexic(theFile);
         
-
-       
+     
     }
     analyzeTerm();
     while (
@@ -576,7 +576,7 @@ function analyzeSyntactic(file) {
                 errorLine: currentToken[0]._line,
               });
               console.log(result);
-              return result;
+              throw result;
             }
           } else {
             if (
@@ -592,7 +592,7 @@ function analyzeSyntactic(file) {
                   errorLine: currentToken[0]._line,
                 });
                 console.log(result);
-                return result;
+                throw result;
             }
           }
         }
@@ -617,7 +617,6 @@ function analyzeSyntactic(file) {
       analyzeExpression();
     }
   }
-
   console.log(result);
   return result;
 }

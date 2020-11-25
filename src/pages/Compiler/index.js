@@ -25,6 +25,8 @@ export default function Compiler() {
     // printTokenList(lexicTokens);
     // console.log(fileObj);
     const syntacticResult = analyzeSyntactic(fileObj);
+
+    
   };
 
   return (
