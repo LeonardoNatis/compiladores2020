@@ -4,3 +4,8 @@
   padding: 0;
   font-family: 'Montserrat', sans-serif;
 }
+
+.container {
+  background-color: rgb(179, 178, 178);
+  height: 100%;
+}
