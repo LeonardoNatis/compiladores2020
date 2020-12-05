@@ -301,7 +301,7 @@ function analyseLexic(file)  {
       }
 
       if (!forceBreak) {
-        console.log("to aqui?")
+        //console.log("to aqui?")
         tokenList.push(curToken);
         caracter = File.getCurChar();
 

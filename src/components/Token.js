@@ -42,6 +42,61 @@ const tokenSymbols = {
     ':': 'sdoispontos'
 };
 
+const posFixa ={
+    /* CONSTANTES PARA OS OPERADORES */
+	 MAIS_UNARIO : "+u",
+	 MENOS_UNARIO : "-u",
+	 NAO : "nao",
+	 MULTIPLICACAO: "*",
+	 DIVISAO : "div",
+	 MAIS : "+",
+	 MENOS : "-",
+	 MAIOR : ">",
+	 MENOR : "<",
+	 MENOR_IGUAL : "<=",
+	 MAIOR_IGUAL : ">=",
+	 IGUAL : "=",
+	 DIFERENTE : "!=",
+	 E : "e",
+	 OU : "ou",
+};
+const tokenMachine = {
+    ALLOC : "ALLOC",
+    DALLOC : "DALLOC",
+    LDV : "LDV",
+    ADD : "ADD",
+    SUB : "SUB",
+    MULT : "MULT",
+    DIVI : "DIVI",
+    AND : "AND",
+    OR : "OR",
+    CME : "CME",
+    CMEQ : "CMEQ",
+    CMA : "CMA",
+    CMAQ : "CMAQ",
+    CEQ : "CEQ",
+    CDIF : "CDIF",
+    INV : "INV",
+    NEG : "NEG",
+    LDC : "LDC",
+    RETURN : "RETURN",
+    RETURNF : "RETURNF",
+    START : "START",
+    HLT : "HLT",
+    JMP : "JMP",
+    JMPF : "JMPF",
+    NULL : "NULL",
+    STR : "STR",
+    CALL : "CALL",
+    RD : "RD",
+    PRN : "PRN",
+   
+    LABEL : "L",
+   
+   /* OUTRAS CONSTANTES */
+   
+    EMPTY : ""
+};
 class Token {
     // Construtor da classe de Token, onde se a criação do usuário tiver já o símbolo, pega o símbolo fornecido, senão atribui de acordo com o mapeamento da função setSymbol
     constructor(lexema, line, symbol) {
@@ -61,4 +116,4 @@ class Token {
     }
 }
 
-export { Token, tokenSymbols };
+export { Token, tokenSymbols,tokenMachine,posFixa };
