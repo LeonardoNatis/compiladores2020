@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './upload.css';
 
 class Upload extends Component {
   constructor(props) {
@@ -19,7 +20,8 @@ class Upload extends Component {
   render = () => {
     return (
       <div>
-        <input type="file" onChange={(event) => this.showFile(event)} />
+        <label for='upload'>Import</label>
+        <input type="file" id="upload" onChange={(event) => this.showFile(event)} />
       </div>
     );
   };
