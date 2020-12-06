@@ -65,7 +65,7 @@ function analyzeSyntactic(file)  {
             throw result;
           } else{
             createCode_3(tokenMachine["HLT"], tokenMachine["EMPTY"], tokenMachine["EMPTY"]);
-            createFile();
+            createFile(code, 'resultado.txt');
             cleanTableLevel();
             //console.log("Compilação realizada com sucesso.");
           }
@@ -1007,9 +1007,17 @@ function analyzeSyntactic(file)  {
     console.log(code);
 	}
 	
-	function createFile() {
-		console.log("CHEGUEI NO FINAL");
+	function createFile(codeGenerated, fileName) {
+    console.log("CHEGUEI NO FINAL");
 
+    // cria um Blob, para poder montar o arquivo txt resultante da compilação
+    const codeBlob = new Blob([codeGenerated], { type: 'text/plain' });
+    const a = document.createElement('a');
+
+    a.setAttribute('download', fileName);
+    a.setAttribute('href', window.URL.createObjectURL(codeBlob));
+    a.click();
+    window.URL.revokeObjectURL(a);
 	}
 
 
