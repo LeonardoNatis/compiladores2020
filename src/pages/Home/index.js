@@ -1,5 +1,10 @@
 import React from 'react';
 
-export default function Compiler() {
-    return <h1>Home</h1>   
+export default function Home() {
+    return (
+        <>
+            <h1>Welcome to our Compiler Project!</h1>
+            <br /> 
+        </>
+    );
 }

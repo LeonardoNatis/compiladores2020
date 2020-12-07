@@ -5,7 +5,6 @@ import "../../React components/Button.css";
 
 import Upload from "../../services/upload";
 
-import { analyseLexic, printTokenList } from "../../components/lexicAnalyzer";
 import { myFile } from "../../components/File";
 import { analyzeSyntactic } from "../../components/syntacticAnalizer";
 

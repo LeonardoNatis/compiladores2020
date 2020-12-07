@@ -4,8 +4,6 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Compiler from './pages/Compiler';
 import VirtualMachine from './pages/VirtualMachine';
-import Navbar from './React components/Navbar/Navbar';
-import './React components/Navbar/Navbar.css'
 
 export default function Routes() {
     return(
