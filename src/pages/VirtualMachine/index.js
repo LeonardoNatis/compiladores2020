@@ -1,30 +1,45 @@
 import React, { useState } from 'react';
 import './style.css';
 
-import Up from "../../services/upload";
+import { Button } from '../../React components/Button';
+import Upload from "../../services/upload";
+import { tokenMachine } from '../../components/Token';
 
-export default function VirtualMachine() {
-    const [instrucao, setInstrucao] = useState([]);
-    const tabela = [
-        {
-        coluna0: "BreakPoint",
-        coluna1: "L",
-        coluna2: "Instruções",
-        coluna3: "Atributo #1",
-        coluna4: "Atributo #2",
-        coluna5: "Comentarios",
-        },
-    ];
+export default function VirtualMachine2() {
+    const [instruction, setInstruction] = useState([]);
+    const [memory, setMemory] = useState([]);
+    
+    const renderIntruction = (instruction, index) => {
+        return (
+            <tr key={index}>
+                <td>
+                    <center>
+                        <input
+                            type="checkbox"
+                            checked={instruction.breakpoint}
+                            onChange={(event) => onChangeBB(event, index)}
+                        />
+                    </center>
+                </td>
+                <td>{index + 1}</td>
+                <td>{instruction.name}</td>
+                <td>{instruction.arg1}</td>
+                <td>{instruction.arg2}</td>
+            </tr>
+        )
+    };
 
-    const pilha = [
-        {
-        coluna1: "Endereço",
-        coluna2: "Valor",
-        },
-    ];
+    const renderMemory = (memory, index) => {
+        return (
+            <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{memory.value}</td>
+            </tr>
+        )
+    };
 
     const compila = () => {
-        if (instrucao.instrucao === "START") {
+        if (instruction.instrucao === "START") {
         console.log("entrou");
         } else {
         console.log("deu ruim");
@@ -32,101 +47,90 @@ export default function VirtualMachine() {
     };
 
     const onChangeBB = (event, index) => {
-        let aux = [...instrucao];
+        let aux = [...instruction];
         aux[index].breakpoint = event.target.checked;
-        setInstrucao(aux);
+        setInstruction(aux);
     };
 
     const onChangeFile = (file) => {
-        setInstrucao(
-        file.split("\r\n").map((instrucao) => ({ instrucao, breakpoint: false }))
-        );
+        let stack = [];
+
+        file.toString().split("\n").forEach( (element, index) => {
+            let splitedElement= element.split(' ');
+
+            if (splitedElement[0] && splitedElement[0] !== "") {
+                if (splitedElement[1] && splitedElement[1] !== "") {
+                    // existe argumento 1
+                    
+                    if (splitedElement[2] && splitedElement[2] !== "") {
+                        // existe argumento 2
+                        stack.push({ name: splitedElement[0], arg1: isNaN(parseInt(splitedElement[1])) ? splitedElement[1] : parseInt(splitedElement[1]), arg2: isNaN(parseInt(splitedElement[2])) === true ? splitedElement[2] : parseInt(splitedElement[2]), line: index, breakpoint: false });
+                    } else if (splitedElement[1] === tokenMachine.NULL) {
+                        // encontrou um Label
+                        stack.push({ name: splitedElement[1], label: splitedElement[0], line: index, breakpoint: false });
+                    } else {
+                        // primeiro argumento normal
+                        stack.push({ name: splitedElement[0], arg1: parseInt(splitedElement[1]), line: index, breakpoint: false });
+                    }
+
+                } else {
+                    // só tem comando
+                    stack.push({ name: splitedElement[0], line: index, breakpoint: false});
+                }
+            }
+        })
+
+        console.log(stack);
+
+        setInstruction(stack);
     };
 
     return(
-        <>
-            <div>
-                <div className="instrucoes">
-                    <p>Instruções a serem executadas pela VM</p>
-                    <table className="tabela">
-                        {tabela.map((header) => {
-                        return (
-                            <tr className="tabela">
-                                <td className="tabela">{header.coluna0}</td>
-                                <td className="tabela">{header.coluna1}</td>
-                                <td className="tabela">{header.coluna2}</td>
-                                <td className="tabela">{header.coluna3}</td>
-                                <td className="tabela">{header.coluna4}</td>
-                                <td className="tabela">{header.coluna5}</td>
-                            </tr>
-                        );
-                        })}
-                        {instrucao.map((linha, index) => {
-                        let separaInstrucao = linha.instrucao.split(" ");
-                        return (
-                            <tr className="tabela">
-                                <td className="tabela">
-                                    <center>
-                                    <input
-                                        type="checkbox"
-                                        checked={linha.breakpoint}
-                                        onChange={(event) => onChangeBB(event, index)}
-                                    />
-                                    </center>
-                                </td>
-                                <td className="tabela">{index + 1}</td>
-                                <td className="tabela">{separaInstrucao[0]}</td>
-                                <td className="tabela">{separaInstrucao[1]}</td>
-                                <td className="tabela">{separaInstrucao[2]}</td>
-                                <td className="tabela">{separaInstrucao[3]}</td>
-                            </tr>
-                        );
-                        })}
-                    </table>
-                </div>
-                <div className="mainJanelas">
-                    <div className="janelas">
-                        <p>Janela de Entrada</p>
-                        <textarea></textarea>
-                    </div>
-                    <div className="janelas">
-                        <p>Janela de Saída</p>
-                        <textarea readOnly></textarea>
-                    </div>
-                    <div className="janelas">
-                        <p>BreakPoint</p>
-                        <textarea readOnly></textarea>
-                    </div>
-                </div>
-                <div className="mainJanelas">
-                    <div>
-                        <Up onChangefile={onChangeFile} />
-                    </div>
-                <div>
-                    <button class="botao" type="button" onClick={compila}>
-                    Compilar
-                    </button>
-                </div>
-                <div>
-                    <button class="botao" type="button">
-                    Proximo
-                    </button>
-                </div>
-                </div>
+        <> 
+            <h1>Virtual Machine</h1>
 
-                <div className="pilha">
-                    <p>Conteúdo da Pilha</p>
-                    <table className="tabela">
-                    {tabela.map((linha) => {
-                        return (
-                        <tr className="tabela">
-                            <td className="tabela">{linha.coluna1}</td>
-                            <td className="tabela">{linha.coluna2}</td>
+            <br />
+            <div className="instrucoes">
+                <p>Instruções a serem executadas pela VM</p>
+                <br />
+                <table className="tabela">
+                    <thead>
+                        <tr>
+                            <td>Breakpoint</td>
+                            <td>Linha</td>
+                            <td>Instrução</td>
+                            <td>Atributo #1</td>
+                            <td>Atributo #2</td>
                         </tr>
-                        );
-                    })}
-                    </table>
-                </div>
+                    </thead>
+                    <tbody>
+                        {instruction.map(renderIntruction)}
+                    </tbody>
+                </table>
+            </div>
+            <div className="pilha">
+                <p>Conteúdo da Pilha</p>
+                <br />
+                <table className="tabela">
+                    <thead>
+                        <tr>
+                            <td>Posição</td>
+                            <td>Valor</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {memory.map(renderMemory)}
+                    </tbody>
+                </table>
+            </div>
+
+            <br />
+            <div className="buttonDiv">
+                <Button>
+                    <Upload onChangefile={onChangeFile} />
+                </Button>
+                <Button onClick={compila}>Execute All</Button>
+                <Button>Execute One</Button>
             </div>
         </>
     );
