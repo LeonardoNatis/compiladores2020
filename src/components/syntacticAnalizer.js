@@ -9,9 +9,10 @@ function analyzeSyntactic(file)  {
   let currentToken = analyseLexic(theFile);
   let result = [];
   let expression = [];
+  let line_global = [];
   
 	// São as nominações para onde será realizado o pulo (Ex: L"0", L"1", etc)
-	let label = 0;
+	let label = 1;
 
 	// São as posições na memória que está alocado a variável
 	let position = 0;
@@ -61,13 +62,13 @@ function analyzeSyntactic(file)  {
               errorMessage: syntacticErrors.UNEXPECTED_CHARACTER,
               errorLine: currentToken[0]._line,
             });
-            //console.log(result);
+            ////console.log(result);
             throw result;
           } else{
             createCode_3(tokenMachine["HLT"], tokenMachine["EMPTY"], tokenMachine["EMPTY"]);
             createFile();
             cleanTableLevel();
-            //console.log("Compilação realizada com sucesso.");
+            ////console.log("Compilação realizada com sucesso.");
           }
           // TODO falta verificar array de tokens do léxico e imprimir erro no caso do Sintático todo estar OK
         } else {
@@ -77,7 +78,7 @@ function analyzeSyntactic(file)  {
             errorMessage: syntacticErrors.EXPECTING_DOT,
             errorLine: currentToken[0]._line,
           });
-          //console.log(result);
+          ////console.log(result);
           throw result;
         }
       } else {
@@ -87,7 +88,7 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
     } else {
@@ -97,7 +98,7 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.MISSING_PROGRAM_NAME,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
   } else {
@@ -107,7 +108,7 @@ function analyzeSyntactic(file)  {
       errorMessage: syntacticErrors.MISSING_PROGRAM_TOKEN,
       errorLine: currentToken[0]._line,
     });
-    //console.log(result);
+    ////console.log(result);
     throw result;
   }
   
@@ -115,7 +116,7 @@ function analyzeSyntactic(file)  {
     //console.log("..........[analyzeBlock]");
     currentToken = analyseLexic(theFile);
     
-    //console.log(currentToken);
+    ////console.log(currentToken);
     
     analyzeVariableStage();
     analyzeSubroutines();
@@ -134,11 +135,11 @@ function analyzeSyntactic(file)  {
   }
 
   function analyzeVariableStage() {
-    //console.log("..........[analyzeVariableStage]");
-    if (currentToken[0]._symbol === tokenSymbols["var"]) { //if (token.getSymbol().equals(Constants.VAR_SIMBOLO)) {
-      currentToken = analyseLexic(theFile);      //token = la.lexical();
-      if (currentToken[0]._symbol === tokenSymbols["identificador"]) { //if (token.getSymbol().equals(Constants.IDENTIFICADOR_SIMBOLO)) {
-        while (currentToken[0]._symbol === tokenSymbols["identificador"]) { //while (token.getSymbol().equals(Constants.IDENTIFICADOR_SIMBOLO)) {
+    ////console.log("..........[analyzeVariableStage]");
+    if (currentToken[0]._symbol === tokenSymbols["var"]) { 
+      currentToken = analyseLexic(theFile);      
+      if (currentToken[0]._symbol === tokenSymbols["identificador"]) { 
+        while (currentToken[0]._symbol === tokenSymbols["identificador"]) { 
           analyzeVariableDeclaration(); //analisaVariaveis();
           if (currentToken[0]._symbol === tokenSymbols[";"]) {
             currentToken = analyseLexic(theFile);
@@ -148,7 +149,7 @@ function analyzeSyntactic(file)  {
               errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
               errorLine: currentToken[0]._line,
             });
-            //console.log(result);
+            ////console.log(result);
             throw result;
           }
         }
@@ -158,11 +159,11 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.INVALID_VARIABLE_NAME,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
     }
-    //console.log("oiiiiiiiiiiiiiiii")
+    //console.log("=========================================================================================")
 		variableOfAlloc.push(countVariable);
 		countVariable = 0;
 		//console.log(variableOfAlloc)
@@ -173,17 +174,17 @@ function analyzeSyntactic(file)  {
 
   //ok
   function analyzeVariableDeclaration() {
-    //console.log("..........[analyzeVariableDeclaration]");
+    ////console.log("..........[analyzeVariableDeclaration]");
     do {
       if (currentToken[0]._symbol === tokenSymbols["identificador"]) {
-        //console.log(currentToken);
+        ////console.log(currentToken);
         searchInTableOfSymbols(currentToken);
 				insertVariable(currentToken, position);
 				countVariable++;
 				position++;
-        //console.log(tableOfSymbols)
+        ////console.log(tableOfSymbols)
         currentToken = analyseLexic(theFile);
-        //console.log(currentToken);
+        ////console.log(currentToken);
         if (
           currentToken[0]._symbol === tokenSymbols[","] ||
           currentToken[0]._symbol === tokenSymbols[":"]
@@ -198,7 +199,7 @@ function analyzeSyntactic(file)  {
                 errorLine: currentToken[0]._line,
               });
 
-              //console.log(result);
+              ////console.log(result);
               throw result;
             }
           }
@@ -208,7 +209,7 @@ function analyzeSyntactic(file)  {
             errorMessage: syntacticErrors.INVALID_VARIABLE_DECLARATION,
             errorLine: currentToken[0]._line,
           });
-          //console.log(result);
+          ////console.log(result);
           throw result;
         }
       } else {
@@ -217,7 +218,7 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.INVALID_VARIABLE_NAME,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
     } while (currentToken[0]._symbol != tokenSymbols[":"]);
@@ -228,7 +229,7 @@ function analyzeSyntactic(file)  {
 
 
   function analyzeType() {
-    //console.log("..........[analyzeType]");
+    ////console.log("..........[analyzeType]");
     currentToken = analyseLexic(theFile);
 
     if (
@@ -240,11 +241,11 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.INVALID_DATA_TYPE,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }else{
       insertTypeOnVariable(currentToken);
-      //console.log("tipo")
+      ////console.log("tipo")
       // AVISO - coloquei para fora pega token.
     }
     currentToken = analyseLexic(theFile);
@@ -253,18 +254,18 @@ function analyzeSyntactic(file)  {
   }
 
   function analyzeCommands() {
-    //console.log("..........[analyzeCommands]");
+    ////console.log("..........[analyzeCommands]");
     
     if (currentToken[0]._symbol === tokenSymbols["inicio"]) {
       
       currentToken = analyseLexic(theFile);
-
-      analyzeSimpleCommand();
+     analyzeSimpleCommand();
 
       while (currentToken[0]._symbol !== tokenSymbols["fim"]) {
         if (currentToken[0]._symbol === tokenSymbols[";"]) {
           currentToken = analyseLexic(theFile);
-
+          //console.log("==================================================================================================");
+ 
           if (currentToken[0]._symbol !== tokenSymbols["fim"]) {
             analyzeSimpleCommand();
           }
@@ -274,7 +275,7 @@ function analyzeSyntactic(file)  {
             errorMessage: syntacticErrors.NOT_A_STATEMENT,
             errorLine: currentToken[0]._line,
           });
-          //console.log(result);
+          ////console.log(result);
           throw result;
         }
       }
@@ -286,13 +287,13 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.UNEXPECTED_CHARACTER,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
   }
 
   function analyzeSimpleCommand() {
-    //console.log("..........[analyzeSimpleCommand]");
+    ////console.log("..........[analyzeSimpleCommand]");
     if (currentToken[0]._symbol === tokenSymbols["identificador"]) {
       analyzeAttributionProcedureCall();
     } else if (currentToken[0]._symbol === tokenSymbols["se"]) {
@@ -315,7 +316,7 @@ function analyzeSyntactic(file)  {
     currentToken = analyseLexic(theFile);
 
     if (currentToken[0]._symbol === tokenSymbols[":="]) {
-      //console.log("aqui")
+      ////console.log("aqui")
       let recebe = searchVariableOrFunction(tokenAux); 
       
       analyzeAttribution(tokenAux);
@@ -344,7 +345,7 @@ function analyzeSyntactic(file)  {
             errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
             errorLine: currentToken[0]._line,
           });
-          //console.log(result);
+          ////console.log(result);
           throw result;
         }
       } else {
@@ -353,7 +354,7 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.INVALID_READ_COMMAND,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
     } else {
@@ -362,7 +363,7 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.EXPECTING_OPEN_PARENTHESIS,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
   }
@@ -378,6 +379,7 @@ function analyzeSyntactic(file)  {
         isFunction = searchVariableOrFunction(currentToken);
         
         if (isFunction) {
+          
 					let labelResult = searchFunctionLabel(currentToken);
 					createCode_3(tokenMachine["CALL"],tokenMachine["LABEL"] + labelResult,tokenMachine["EMPTY"]);// erro aqui talvez
 				} else {
@@ -399,7 +401,7 @@ function analyzeSyntactic(file)  {
             errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
             errorLine: currentToken[0]._line,
           });
-          //console.log(result);
+          ////console.log(result);
           throw result;
         }
       } else {
@@ -408,7 +410,7 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.INVALID_READ_COMMAND,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
     } else {
@@ -417,17 +419,18 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.EXPECTING_OPEN_PARENTHESIS,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
   }
 
 
   function analyzeWhile() {
-    //console.log("..........[analyzeWhile]");
+    ////console.log("..........[analyzeWhile]");
     let auxrot1, auxrot2;
 
-		auxrot1 = label;
+    auxrot1 = label;
+    console.log("label: "+label)
 		createCode_3(tokenMachine["LABEL"] + label,tokenMachine["NULL"],tokenMachine["EMPTY"]);
 		label++;
 
@@ -454,6 +457,7 @@ function analyzeSyntactic(file)  {
       analyzeSimpleCommand();
 
       createCode_3(tokenMachine["JMP"] ,tokenMachine["LABEL"]  + auxrot1,tokenMachine["EMPTY"]);
+      console.log("label: "+auxrot2)
       createCode_3(tokenMachine["LABEL"] + auxrot2,tokenMachine["NULL"],tokenMachine["EMPTY"]);
       
     } else {
@@ -462,25 +466,30 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.EXPECTING_FAÇA_TOKEN,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
   
   }
   //ok
   function analyzeIf() {
-    //console.log("..........[analyzeIf]");
+    ////console.log("..........[analyzeIf]");
 
     let auxrot_1, auxrot_2;
-    //console.log("ANALISA SE")
+    ////console.log("ANALISA SE")
 		auxLabel++;
 		if (flagFunctionList[flagFunctionList.length - 1]) {
-      //console.log("aqui")
-			insertTokenOnFunctionList(new Token(currentToken[0]._symbol, currentToken[0]._lexema + auxLabel, currentToken[0]._line));// TODO
+      ////console.log("aqui")
+      let recebeToken = [];
+      recebeToken.push(currentToken[0]);
+      recebeToken[0]._lexema = recebeToken[0]._lexema + auxLabel
+      //recebeToken.push(currentToken[0]._symbol, currentToken[0]._lexema + auxLabel, currentToken[0]._line) 
+      insertTokenOnFunctionList(recebeToken);
+      recebeToken = [];
 		}
 		
     currentToken = analyseLexic(theFile);
-    //console.log(currentToken)
+    ////console.log(currentToken)
     
     analyzeExpression();
 
@@ -490,8 +499,8 @@ function analyzeSyntactic(file)  {
 		createCode_1(newExpression);
 		
     let type = returnTypeOfExpression(aux);
-    console.log("type: "+type)
-    //console.log(tokenSymbols["se"])
+    //console.log("type: "+type)
+    ////console.log(tokenSymbols["se"])
 		whoCallsMe(type,tokenSymbols["se"]);
 		expression = [];
 
@@ -502,7 +511,12 @@ function analyzeSyntactic(file)  {
       label++;
 
       if (flagFunctionList[flagFunctionList.length - 1]) {
-				insertTokenOnFunctionList(new Token(currentToken[0]._symbol, currentToken[0]._lexema + auxLabel, currentToken[0]._line));
+        let recebeToken = [];
+        recebeToken.push(currentToken[0]);
+        recebeToken[0]._lexema = recebeToken[0]._lexema + auxLabel
+        //recebeToken.push(currentToken[0]._symbol, currentToken[0]._lexema + auxLabel, currentToken[0]._line) 
+        insertTokenOnFunctionList(recebeToken);
+        recebeToken = [];
 			}
 
       currentToken = analyseLexic(theFile);
@@ -514,18 +528,26 @@ function analyzeSyntactic(file)  {
         auxrot_2 = label;
 				createCode_3(tokenMachine["JMP"],tokenMachine["LABEL"] + label,tokenMachine["EMPTY"]);
 				label++;
-
+        console.log("label: "+auxrot_1)
 				createCode_3(tokenMachine["LABEL"] + auxrot_1,tokenMachine["NULL"],tokenMachine["EMPTY"]);
 
 				if (flagFunctionList[flagFunctionList.length - 1]) {
-					insertTokenOnFunctionList(new Token(currentToken[0]._symbol, currentToken[0]._lexema + auxLabel, currentToken[0]._line));
+          let recebeToken = [];
+          recebeToken.push(currentToken[0]);
+          console.log("aqui");
+          console.log(recebeToken);
+          recebeToken[0]._lexema = recebeToken[0]._lexema + auxLabel
+          //recebeToken.push(currentToken[0]._symbol, currentToken[0]._lexema + auxLabel, currentToken[0]._line) 
+          insertTokenOnFunctionList(recebeToken);
+          recebeToken = []
 				}
 
         currentToken = analyseLexic(theFile);
         analyzeSimpleCommand();
-      
+        console.log("label: "+auxrot_2)
         createCode_3(tokenMachine["LABEL"] + auxrot_2,tokenMachine["NULL"],tokenMachine["EMPTY"]);
       }else{
+        console.log("label: "+auxrot_1)
         createCode_3(tokenMachine["LABEL"] + auxrot_1,tokenMachine["NULL"],tokenMachine["EMPTY"]);
       }
     } else {
@@ -534,11 +556,11 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.EXPECTING_ENTAO_TOKEN,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
     if (flagFunctionList[flagFunctionList.length - 1]) {
-			verifyFunctionList(String.valueOf(auxLabel)); // TODO
+			verifyFunctionList(auxLabel); // TODO
 		}
 		auxLabel--;
   }
@@ -547,7 +569,7 @@ function analyzeSyntactic(file)  {
     //console.log("..........[analyzeSubroutines]");
     let flag = 0;
     let auxrot = 0;
-
+    //console.log(currentToken[0]._symbol);
     if (
       currentToken[0]._symbol === tokenSymbols["procedimento"] ||
       currentToken[0]._symbol === tokenSymbols["funcao"]
@@ -576,13 +598,15 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
 
-      if (flag === 1) {
-        createCode_3(tokenMachine["LABEL"] + auxrot,tokenMachine["NULL"],tokenMachine["EMPTY"]);
-      }
+    }
+    console.log("flag: "+flag)
+    if (flag === 1) {
+      console.log("label: "+auxrot)
+      createCode_3(tokenMachine["LABEL"] + auxrot,tokenMachine["NULL"],tokenMachine["EMPTY"]);
     }
   }
   
@@ -595,16 +619,17 @@ function analyzeSyntactic(file)  {
     currentToken = analyseLexic(theFile);
 
     if (currentToken[0]._symbol === tokenSymbols["identificador"]) {
-
+      //console.log("entrei");
       searchProcedureWithTheSameName(currentToken);
 			insertProcOrFunc(currentToken,tokenSymbols["procedimento"], label);
-
+      console.log("Label:"+label)
 			createCode_3(tokenMachine["LABEL"] + label, tokenMachine["NULL"],tokenMachine["EMPTY"]);
 			label++;
 
       currentToken = analyseLexic(theFile);
 
       if (currentToken[0]._symbol === tokenSymbols[";"]) {
+        //console.log("fechei o procedimento");
         analyzeBlock();
       } else {
         result.push({
@@ -612,7 +637,7 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.EXPECTING_SEMICOLON,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
     } else {
@@ -621,11 +646,12 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.INVALID_PROCEDURE_DECLARATION,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
     cleanTableLevel();
-
+    //console.log("variaveis alocadas: "+variableOfAlloc[variableOfAlloc.length - 1]);
+    //console.log(variableOfAlloc);
 		if (variableOfAlloc[variableOfAlloc.length - 1] > 0) {
 			position = position - variableOfAlloc[variableOfAlloc.length - 1];
 			createCode_2(tokenMachine["DALLOC"], -1);
@@ -649,12 +675,13 @@ function analyzeSyntactic(file)  {
       
       searchFunctionWithTheSameName(currentToken);
 			insertProcOrFunc(currentToken,tokenSymbols["funcao"], label);
-
-			createCode_3(tokenMachine["LABEL"] + label,tokenMachine["NULL"],tokenMachine["EMPTY"]);
+      console.log("label: "+label)
+			createCode_3(tokenMachine["LABEL"] + label, tokenMachine["NULL"],tokenMachine["EMPTY"]);
 			label++;
 			
-			nameOfFunction.push(currentToken[0]._lexema);
-			setLine(currentToken[0]._line);
+      nameOfFunction.push(currentToken[0]._lexema);
+      
+			line_global.push(currentToken[0]._line);
 
       currentToken = analyseLexic(theFile);
 
@@ -666,9 +693,9 @@ function analyzeSyntactic(file)  {
           currentToken[0]._symbol === tokenSymbols["booleano"]
         ) {
           if (currentToken[0]._symbol === tokenSymbols["inteiro"]) {
-						insertTypeOnFunction(tokenSymbols["inteiro"]);
+						insertTypeOnFunction("inteiro");
 					} else {
-						insertTypeOnFunction(tokenSymbols["booleano"]);
+						insertTypeOnFunction("booleano");
           }
           
           currentToken = analyseLexic(theFile);
@@ -682,7 +709,7 @@ function analyzeSyntactic(file)  {
             errorMessage: syntacticErrors.INVALID_FUNCTION_DECLARATION,
             errorLine: currentToken[0]._line,
           });
-          //console.log(result);
+          ////console.log(result);
           throw result;
         }
       } else {
@@ -691,7 +718,7 @@ function analyzeSyntactic(file)  {
           errorMessage: syntacticErrors.EXPECTING_COLON,
           errorLine: currentToken[0]._line,
         });
-        //console.log(result);
+        ////console.log(result);
         throw result;
       }
     } else {
@@ -700,7 +727,7 @@ function analyzeSyntactic(file)  {
         errorMessage: syntacticErrors.INVALID_FUNCTION_DECLARATION,
         errorLine: currentToken[0]._line,
       });
-      //console.log(result);
+      ////console.log(result);
       throw result;
     }
 
@@ -724,7 +751,7 @@ function analyzeSyntactic(file)  {
   
 
   function analyzeExpression() {
-    //console.log("..........[analyzeExpression]");
+    ////console.log("..........[analyzeExpression]");
     analyzeSimpleExpression();
 
     let operatorsRegex = /smaior|smaiorig|sig|smenor|smenorig|sdif/g;
@@ -738,14 +765,17 @@ function analyzeSyntactic(file)  {
 
   function analyzeSimpleExpression() {
     
-    //console.log("..........[analyzeSimpleExpression]");
+    ////console.log("..........[analyzeSimpleExpression]");
  
     if (
       currentToken[0]._symbol === tokenSymbols["+"] ||
       currentToken[0]._symbol === tokenSymbols["-"]
     ) {
-      let aux = new Token(currentToken[0]._symbol, currentToken[0]._lexema + "u", currentToken[0]._line)
-      expression.push(aux);
+      
+      let recebeToken = [];
+      recebeToken.push(currentToken[0]);
+      recebeToken[0]._lexema = recebeToken[0]._lexema + "u"
+      expression.push(recebeToken);
       currentToken = analyseLexic(theFile);
         
      
@@ -765,7 +795,7 @@ function analyzeSyntactic(file)  {
   
 
   function analyzeTerm() {
-    //console.log("..........[analyzeTerm]");
+    ////console.log("..........[analyzeTerm]");
     analyzeFactor();
 
     while (
@@ -782,8 +812,8 @@ function analyzeSyntactic(file)  {
   
 
   function analyzeFactor() {
-    //console.log("..........[analyzeFactor]");
-    //console.log(currentToken[0]._symbol)
+    ////console.log("..........[analyzeFactor]");
+    ////console.log(currentToken[0]._symbol)
     if (currentToken[0]._symbol === tokenSymbols["identificador"]) {
 
       let index = searchSymbol(currentToken);
@@ -798,7 +828,7 @@ function analyzeSyntactic(file)  {
     } else {
       if (currentToken[0]._symbol === tokenSymbols["numero"]) {
         expression.push(currentToken);
-        //console.log(expression[0])
+        ////console.log(expression[0])
         currentToken = analyseLexic(theFile);
       } else {
         if (currentToken[0]._symbol === tokenSymbols["nao"]) {
@@ -809,9 +839,9 @@ function analyzeSyntactic(file)  {
           if (currentToken[0]._symbol === tokenSymbols["("]) {
             expression.push(currentToken);
             currentToken = analyseLexic(theFile);
-            //console.log(currentToken)
-            //console.log("expression")
-            //console.log(expression)
+            ////console.log(currentToken)
+            ////console.log("expression")
+            ////console.log(expression)
             analyzeExpression();
 
             if (currentToken[0]._symbol === tokenSymbols[")"]) {
@@ -823,7 +853,7 @@ function analyzeSyntactic(file)  {
                 errorMessage: syntacticErrors.EXPECTING_CLOSE_PARENTHESIS,
                 errorLine: currentToken[0]._line,
               });
-              //console.log(result);
+              ////console.log(result);
               throw result;
             }
           } else {
@@ -840,7 +870,7 @@ function analyzeSyntactic(file)  {
                   errorMessage: syntacticErrors.INVALID_EXPRESSION,
                   errorLine: currentToken[0]._line,
                 });
-                //console.log(result);
+                ////console.log(result);
                 throw result;
             }
           }
@@ -852,19 +882,22 @@ function analyzeSyntactic(file)  {
   function analyzeAttribution(attributionToken) {  
     // Não precisa tratar separado, pode ser tratado como uma expressão, sintaticamente falando
     currentToken = analyseLexic(theFile);
-    //console.log(currentToken)
+    ////console.log(currentToken)
     analyzeExpression();
-    //console.log("oi")
+    console.log("oi")
     let aux = expressionToPostfix(expression);
-    //console.log("sai posfix")
-		//console.log(aux)
+    ////console.log("sai posfix")
+		////console.log(aux)
     let newExpression = formatExpression(aux);
 		createCode_1(newExpression);
-    //console.log("aqui")
+    ////console.log("aqui")
     let type = returnTypeOfExpression(aux);
-    //console.log("chamada whoCallsMe")
-    //console.log(attributionToken[0]._lexema)
-    //console.log(type)
+
+    ////console.log(attributionToken[0]._lexema)
+    ////console.log(type)
+    //console.log("to aqui");
+    console.log(type);
+    console.log(attributionToken[0]._lexema);
 		whoCallsMe(type, attributionToken[0]._lexema);
 
 		expression = [];
@@ -901,27 +934,27 @@ function analyzeSyntactic(file)  {
 		// válida, continuará a excecução
 
 		currentToken = analyseLexic(theFile);
-    // //console.log("..........[analyzeFunctionCall]");
+    // ////console.log("..........[analyzeFunctionCall]");
     // currentToken = analyseLexic(theFile);
     // if(currentToken[0]._symbol === tokenSymbols[":="]){
     //   currentToken = analyseLexic(theFile);
     //   analyzeExpression();
     // }
   }
-  //console.log(result);
+  ////console.log(result);
   return result;
 
 	//==================================================================================================================
 
 	function createCode_3(value1, value2, value3) {
-
+  //console.log((value1 + " ").concat(value2 + " ").concat(value3 + "\r\n"));
 		code = code.concat(value1 + " ").concat(value2 + " ").concat(value3 + "\r\n");
-    console.log(code);
+    ////console.log(code);
 	}
 
 	function createCode_1(expressionPosFix) {
 		let aux = expressionPosFix.split(" ");
-    //console.log("createCode_1")
+    ////console.log("createCode_1")
 		for (let a = 0; a < aux.length; a++) {
 
 			if (aux[a].includes("p")) {
@@ -929,7 +962,7 @@ function analyzeSyntactic(file)  {
 				let value = aux[a].split("p");
 				code = code.concat(tokenMachine["LDV"] + " ").concat(value[1]).concat("\r\n");
 
-			} else if (aux[a] == "funcao") {
+			} else if (aux[a].includes("funcao")) {
 
 				let value = aux[a].split("funcao");
 				code = code.concat(tokenMachine["CALL"] + " ").concat(tokenMachine["LABEL"] + value[1]).concat("\r\n");
@@ -976,14 +1009,14 @@ function analyzeSyntactic(file)  {
 				}
 			}
     }
-    console.log(code);
+    
 	}
 
 	function createCode_2(command, countVariable) {
-    //console.log("createCode_2")
-    //console.log("command: "+command)
+    ////console.log("createCode_2")
+    ////console.log("command: "+command)
 		if (tokenMachine["ALLOC"] == (command)) {
-      //console.log("eae")
+      ////console.log("eae")
       
 			code = code.concat(command + " ").concat(variableInMemory + " ").concat(countVariable + "\r\n");
 			variableInMemory = variableInMemory + countVariable;
@@ -1004,10 +1037,11 @@ function analyzeSyntactic(file)  {
 				
 			
     }
-    console.log(code);
+    //
 	}
 	
 	function createFile() {
+    console.log(code);
 		console.log("CHEGUEI NO FINAL");
 
 	}
@@ -1029,27 +1063,33 @@ function analyzeSyntactic(file)  {
 
 	// Procedimento ou Função
 	function insertProcOrFunc(token,type,label) {
-		if (tokenSymbols["PROCEDIMENTO"] === type) {
+    //console.log("olha eu aqui");
+    //console.log(tokenSymbols["procedimento"]);
+    //console.log(type);
+		if (tokenSymbols["procedimento"] === type) {
 			tableOfSymbols.push({lexema: token[0]._lexema,closed: false,type: null,label: label,position: -1, token: 'procedimento'});
-		} else if (tokenSymbols["FUNCAO"] === type) {
+		} else if (tokenSymbols["funcao"] === type) {
 			tableOfSymbols.push({lexema: token[0]._lexema,closed: false,type: null,label: label,position: -1, token: 'funcao'});
 		}
 	}
 
 	// Variável
 	function insertVariable(token, position) {
-    //console.log(token)
-    //console.log(position)
+    ////console.log(token)
+    ////console.log(position)
 		tableOfSymbols.push({lexema: token[0]._lexema,closed: false,type: null,label: -1,position: position, token: 'variavel'});
 	}
 
 	// Tipo Função
 	function insertTypeOnFunction(type) {
-
+    //console.log(type);
+  //console.log("insertTypeOnFunction");
 		let symbol = tableOfSymbols[tableOfSymbols.length - 1];
-
-		if (symbol[0].token === 'funcao' && symbol[0].type == null) {
-			tableOfSymbols[tableOfSymbols.length - 1].type = type;
+  //console.log(symbol);
+  //console.log(symbol.token);
+		if (symbol.token === 'funcao' && symbol.type === null) {
+      tableOfSymbols[tableOfSymbols.length - 1].type = type;
+      console.log(tableOfSymbols);
 		}
 	}
 
@@ -1077,9 +1117,10 @@ function analyzeSyntactic(file)  {
 		}
 	}
 	function searchFunctionLabel(token){
-		let labelResult = searchFunctionLabel2(token[0]._lexema);
-
-		if (labelResult == -1) {
+    //console.log(token);
+		let labelResult = searchFunctionLabel2(token);
+    //console.log(labelResult);
+		if (labelResult === -1) {
 			throw "Função '" + token[0]._lexema + "' não está declarada.\nLinha: " + token[0]._line;
 		} else {
 			return labelResult;
@@ -1088,8 +1129,11 @@ function analyzeSyntactic(file)  {
 
 	function searchFunctionLabel2(lexema) {
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
-			if (tableOfSymbols[i] == 'funcao') {
-				if (lexema == tableOfSymbols[i].lexema) {
+			if (tableOfSymbols[i].token === 'funcao') {
+        console.log(tableOfSymbols[i].lexema);
+        console.log("lexema: "+lexema);
+				if (lexema === tableOfSymbols[i].lexema) {
+          console.log("ue");
 					return tableOfSymbols[i].label;
 				}
 			}
@@ -1100,7 +1144,7 @@ function analyzeSyntactic(file)  {
 
 	function searchFunctionWithTheSameName(token){
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
-			if (token[0]._lexema = tableOfSymbols[i].lexema) {
+			if (token[0]._lexema === tableOfSymbols[i].lexema) {
 				throw "Já existe uma função com o mesmo nome da função da linha: " + token[0]._line;
 			}
 		}
@@ -1114,15 +1158,17 @@ function analyzeSyntactic(file)  {
 
 	function search(lexema) {
 		let i;
-    //console.log(lexema);
-    //console.log(tableOfSymbols.length);
+    
+    ////console.log(tableOfSymbols.length);
 		for (i = (tableOfSymbols.length - 1); i >= 0; i--) {
+      //console.log(lexema);
       //console.log(tableOfSymbols[i].token);
-			if (tableOfSymbols[i].token == 'variavel') {
+      //console.log(tableOfSymbols.length);
+			if (tableOfSymbols[i].token === 'variavel') {
         //console.log("aqui")
-        //console.log(lexema)
-        //console.log(tableOfSymbols[i].lexema)
-				if (lexema == tableOfSymbols[i].lexema) {
+        ////console.log(lexema)
+        ////console.log(tableOfSymbols[i].lexema)
+				if (lexema === tableOfSymbols[i].lexema) {
 					return true;
 				}
 			}else{
@@ -1132,7 +1178,7 @@ function analyzeSyntactic(file)  {
 
 		for (let j = i; j >= 0; j--) {
 			if (tableOfSymbols[i].token === 'procedimento' || tableOfSymbols[i].token === 'funcao' ) {
-				if (lexema = tableOfSymbols[i].lexema) {
+				if (lexema === tableOfSymbols[i].lexema) {
 					return true;
 				}
 			}
@@ -1149,15 +1195,18 @@ function analyzeSyntactic(file)  {
 	}
 
 	function searchProcedure(token) {
+    //console.log(token);
 		if (!(searchProcedure2(token[0]._lexema))) {
 			throw "Procedimento '" + token[0]._lexema + "' não está declarado.\nLinha: " + token[0]._line;
 		}
 	}
 
 	function searchProcedure2(lexema) {
+    //console.log(tableOfSymbols);
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
+      //console.log(tableOfSymbols[i].token);
 			if (tableOfSymbols[i].token === 'procedimento') {
-				if (lexema = tableOfSymbols[i].lexema) {
+				if (lexema === tableOfSymbols[i].lexema) {
 					return true;
 				}
 			}
@@ -1169,7 +1218,7 @@ function analyzeSyntactic(file)  {
 	function searchProcedureLabel(token)  {
 		let labelResult = searchProcedureLabel2(token[0]._lexema);
 
-		if (labelResult == -1) {
+		if (labelResult === -1) {
 			throw "Procedimento '" + token[0]._lexema + "' não está declarado.\nLinha: " + token[0]._line;
 		} else {
 			return labelResult;
@@ -1177,9 +1226,10 @@ function analyzeSyntactic(file)  {
 	}
 
 	function searchProcedureLabel2(lexema) {
+    //console.log(lexema);
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
-			if (tableOfSymbols[i] === 'procedimento') {
-				if (lexema = tableOfSymbols[i].lexema) {
+			if (tableOfSymbols[i].token === 'procedimento') {
+				if (lexema === tableOfSymbols[i].lexema) {
 					return tableOfSymbols[i].label;
 				}
 			}
@@ -1188,6 +1238,7 @@ function analyzeSyntactic(file)  {
 	}
 
 	function searchProcedureWithTheSameName(token)  {
+    //console.log("procurando procedimento com nome igual");
 		if (searchProcedure2(token[0]._lexema)) {
 			throw "Já existe um procedimento com o mesmo nome do procedimento da linha: " + token[0]._line;
 		}
@@ -1205,8 +1256,8 @@ function analyzeSyntactic(file)  {
 
 	function searchSymbol2(lexema) {
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
-			if (tableOfSymbols[i].token === 'variavel' || tableOfSymbols[i] === 'funcao') {
-				if (lexema == tableOfSymbols[i].lexema) {
+			if (tableOfSymbols[i].token === 'variavel' || tableOfSymbols[i].token === 'funcao') {
+				if (lexema === tableOfSymbols[i].lexema) {
 					return i;
 				}
 			}
@@ -1221,11 +1272,11 @@ function analyzeSyntactic(file)  {
 	}
 	
 	function searchVariable2(lexema) {
-    //console.log(lexema)
+    ////console.log(lexema)
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
 			if (tableOfSymbols[i].token === 'variavel') {
 				if (lexema == tableOfSymbols[i].lexema) {
-          //console.log("achou?")
+          ////console.log("achou?")
 					return true;
 				}
 			}
@@ -1235,8 +1286,8 @@ function analyzeSyntactic(file)  {
 	}
 
 	function  searchVariableOrFunction(token)  {
-    //console.log("token: "+token)
-    //console.log(token)
+    ////console.log("token: "+token)
+    ////console.log(token)
 		if (!(searchVariable2(token[0]._lexema) || searchFunction2(token[0]._lexema))) {
 			throw "A variável ou função " + token[0]._lexema + " não está definida.\n Linha: " + token[0]._line;
 		} else {
@@ -1299,13 +1350,13 @@ function analyzeSyntactic(file)  {
 	}
 	
 	function searchTypeOfVariableOrFunction( lexema) {
-    //console.log("searchTypeOfVariableOrFunction")
-
+    ////console.log("searchTypeOfVariableOrFunction")
+//console.log(tableOfSymbols);
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
 
-      //console.log("lexema: "+tableOfSymbols[i].lexema+" igual: "+lexema)
-			if (tableOfSymbols[i].token == 'variavel' || tableOfSymbols[i].token == 'funcao') {
-				if (lexema == tableOfSymbols[i].lexema) {
+      ////console.log("lexema: "+tableOfSymbols[i].lexema+" igual: "+lexema)
+			if (tableOfSymbols[i].token === 'variavel' || tableOfSymbols[i].token === 'funcao') {
+				if (lexema === tableOfSymbols[i].lexema) {
           
 					return tableOfSymbols[i].type;
 				}
@@ -1315,13 +1366,13 @@ function analyzeSyntactic(file)  {
 	}
 
 	function searchPositionOfVariable(variable) {
-    //console.log(variable)
-    //console.log(tableOfSymbols)
+    ////console.log(variable)
+    ////console.log(tableOfSymbols)
 		for (let i = (tableOfSymbols.length - 1); i >= 0; i--) {
 			if (tableOfSymbols[i].token == 'variavel') {
-        //console.log("to AQUI")
-        //console.log(variable)
-        //console.log(tableOfSymbols[i].lexema)
+        ////console.log("to AQUI")
+        ////console.log(variable)
+        ////console.log(tableOfSymbols[i].lexema)
 				if (variable == (tableOfSymbols[i].lexema)) {
           
 					return tableOfSymbols[i].position;
@@ -1340,6 +1391,8 @@ function analyzeSyntactic(file)  {
     let output = "";
 
 		for (let a = 0; a < expression2.length; a++) {
+      console.log(expression2.length);
+      console.log(expression2[a]);
       let parcel = expression2[a][0]._lexema;
       
 			line = expression2[a][0]._line; 
@@ -1352,7 +1405,7 @@ function analyzeSyntactic(file)  {
         output = output.concat(parcel + " ");
 
 			} else if (tokenSymbols["("] === (expression2[a][0]._symbol)) {
-        console.log("final")
+        //console.log("final")
 				stack.push(parcel);
 			} else if (tokenSymbols[")"] === (expression2[a][0]._symbol)) {
         let stackTop = stack.length - 1;
@@ -1365,7 +1418,7 @@ function analyzeSyntactic(file)  {
           stackTop--;
 
         }
-        //console.log("remove")
+        ////console.log("remove")
 				stack.pop(stackTop); // remove o abre parenteses sem inclui-lo na saida
 
 			} else {
@@ -1401,12 +1454,12 @@ function analyzeSyntactic(file)  {
     
     let stackTop = stack.length - 1;
 		if (stack.length > 0) {
-      console.log("aqui")
+      //console.log("aqui")
 			for (let i = stackTop; i >= 0; i--) {
 
 				output = output.concat(stack[i] + " ");
         stack.pop(i);
-        console.log(output)
+        //console.log(output)
 			}
 		}
     
@@ -1414,10 +1467,10 @@ function analyzeSyntactic(file)  {
 	}
 
 	function returnTypeOfExpression(expression2)  {
-    //console.log("returnTypeOfExpression")
-    console.log(expression2)
+    ////console.log("returnTypeOfExpression")
+    //console.log(expression2)
 		let type = separatePostFixExpression(expression2);
-    //console.log("Type:"+type)
+    ////console.log("Type:"+type)
 		if (type == "0") {
 			return "inteiro";
 		} else {
@@ -1426,7 +1479,7 @@ function analyzeSyntactic(file)  {
 	}
 
 	function separatePostFixExpression(expression2)  {
-    //console.log("separatePostFixExpression")
+    console.log("separatePostFixExpression")
     let aux = expression2.split(" "); 
     console.log(aux);
     let expressionList = aux;
@@ -1434,53 +1487,53 @@ function analyzeSyntactic(file)  {
 
 		for (let j = 0; j < count; j++) {
       let parcel = expressionList[j];
-      //console.log(expressionList)
+      ////console.log(expressionList)
       
 			if (!(isOperator(parcel)) && !(isUnaryOperator(parcel))) {
         // !(false && false) = true
-				if (tokenSymbols["inteiro"] == (searchTypeOfVariableOrFunction(parcel))) {
-          //console.log("Inteiro")
+				if ("inteiro" == (searchTypeOfVariableOrFunction(parcel))) {
+          ////console.log("Inteiro")
           expressionList[j] = "0";
            
 				} else {
-          if (tokenSymbols["booleano"] == (searchTypeOfVariableOrFunction(parcel))) {
-            //console.log("Booleano")
+          if ("booleano" == (searchTypeOfVariableOrFunction(parcel))) {
+            ////console.log("Booleano")
             expressionList[j] = "1"; 
           } else {
-            if (tokenSymbols["verdadeiro"] == (parcel) || tokenSymbols["falso"] == (parcel)) {
-              //console.log("Verdadeiro ou Falso")
+            if ("verdadeiro" == (parcel) || "falso" == (parcel)) {
+              console.log("Verdadeiro ou Falso")
               expressionList[j] = "1"; 
             } else {
 
               expressionList[j] = "0";
-              //console.log(expressionList) 
+              ////console.log(expressionList) 
             }
           }
         }
 			}
 
 		}
-    console.log(expressionList);
+    //console.log(expressionList);
 
 		for (let i = 0; i < expressionList.length; i++) {
-      //console.log("Operador: "+expressionList[i])
+      ////console.log("Operador: "+expressionList[i])
 			if (isOperator(expressionList[i])) {
 				let operation = returnOperationType(expressionList[i - 2], expressionList[i - 1],expressionList[i]);
-        console.log("começa aqui");
-        //console.log(operation)
-        console.log("i: "+i)
-        console.log(expressionList)
+        //console.log("começa aqui");
+        ////console.log(operation)
+        //console.log("i: "+i)
+        //console.log(expressionList)
         expressionList.splice(i,1);
-        console.log(expressionList)
+        //console.log(expressionList)
         expressionList.splice(i - 1,1);
-        console.log(expressionList)
+        //console.log(expressionList)
         expressionList[i - 2]=  operation;
-        console.log(expressionList)
+        //console.log(expressionList)
 
         i = 0;
-        console.log("i: "+i)
+        //console.log("i: "+i)
 			} else if (isUnaryOperator(expressionList[i])) {
-        //console.log("oi")
+        ////console.log("oi")
 				let operation = returnOperationType(expressionList[i - 1], null, expressionList[i]);
 
 				expressionList.pop(i);
@@ -1494,9 +1547,9 @@ function analyzeSyntactic(file)  {
 	}
 
 	function isOperator(parcel) {
-  //console.log(parcel)
-  //console.log(posFixa["MULTIPLICACAO"])
-  //console.log(posFixa["MAIS"])
+  ////console.log(parcel)
+  ////console.log(posFixa["MULTIPLICACAO"])
+  ////console.log(posFixa["MAIS"])
 		if (posFixa["MULTIPLICACAO"] == (parcel) || posFixa["DIVISAO"] == (parcel) || posFixa["MAIS"] == (parcel)
 				|| posFixa["MENOS"] == (parcel) || posFixa["MAIOR"] == (parcel) || posFixa["MENOR"] == (parcel)
 				|| posFixa["MAIOR_IGUAL"] == (parcel) || posFixa["MENOR_IGUAL"] == (parcel)
@@ -1612,20 +1665,20 @@ function analyzeSyntactic(file)  {
 	}
 
 	function whoCallsMe( type, caller)  {
-    console.log(tokenSymbols["se"])
-    console.log(caller);
+    //console.log(type)
+    //console.log(caller);
 		if (tokenSymbols["se"] === (caller) || tokenSymbols["enquanto"] === (caller)) {
-      console.log("aqui");
-      console.log(type);
-      console.log(tokenSymbols["booleano"]);
+      //console.log("aqui");
+      //console.log(type);
+      //console.log(tokenSymbols["booleano"]);
 			if ("booleano" !== (type)) {
 				throw "A condição presente no '" + caller + "' deveria resultar num tipo booleano";
 			}
 		} else {
       let callerType = searchTypeOfVariableOrFunction(caller);
       //console.log(callerType)
-      //console.log(type)
-			if (!(type == (callerType))) {
+      ////console.log(type)
+			if (!(type === (callerType))) {
 				throw "Não é possível realizar a atribuição de uma expressão do tipo " + type + " em uma variável/função do tipo " + callerType;
 			}
 		}
@@ -1639,30 +1692,31 @@ function analyzeSyntactic(file)  {
 
 	// Formata a expressão para usar na geração de código
 	function formatExpression(expression) {
-    console.log(" formatExpression")
+    //console.log(" formatExpression")
     let aux = expression.split(" "); 
-    //console.log(aux)
+    ////console.log(aux)
 		let newExpression = "";
 		let auxPosition;
 
 		for (let i = 0; i < aux.length; i++) {
-      //console.log(aux[i])
+      ////console.log(aux[i])
 			if(!searchFunction2(aux[i])) {
-        //console.log("oi")
+        ////console.log("oi")
 				auxPosition = searchPositionOfVariable(aux[i]);
-        //console.log(auxPosition)
+        ////console.log(auxPosition)
 				if (auxPosition != -1) {
 					newExpression = newExpression.concat("p" + auxPosition + " ");
 				} else {
 					newExpression = newExpression.concat(aux[i] + " ");
 				}
 			} else {
+        console.log(aux[i]);
 				let labelResult = searchFunctionLabel(aux[i]);
 				newExpression = newExpression.concat("funcao" + labelResult + " ");
 			}
 			
 		}
-    console.log("acabou formatExpression")
+    //console.log("acabou formatExpression")
 		return newExpression;
 	}
 
@@ -1674,73 +1728,83 @@ function analyzeSyntactic(file)  {
 	}
 	
 	function verifyFunctionList(label) {
+    console.log("verifyFunctionList")
 		let auxToken = null;
 		
 		let conditionalThenReturn = false;
 		let conditionalElseReturn = false;
 		let thenPosition = -1;
 		let elsePosition = thenPosition;
-		
+		console.log(functionTokenList);
 		for(let i = 0; i < functionTokenList.length; i++) {
-			if(tokenSymbols["se"] == (functionTokenList[i]._symbol)
-			   && functionTokenList[i]._lexema.includes(label)) {
-				functionTokenList.pop(i);
+      
+      console.log("simbolo: "+functionTokenList[i][0]._symbol);
+      console.log("label: "+label);
+      console.log("lexema: "+functionTokenList[i][0]._lexema);
+      
+			if(tokenSymbols["se"] === (functionTokenList[i][0]._symbol)
+			   && functionTokenList[i][0]._lexema.includes(label)) {
+           console.log("se true");
+				functionTokenList.splice(i,1);
 				i--;
-			} else if (tokenSymbols["entao"] == (functionTokenList[i]._symbol) 
-					&& functionTokenList[i]._lexema.includes(label)) {
+			} else if (tokenSymbols["entao"] === (functionTokenList[i][0]._symbol) 
+					&& functionTokenList[i][0]._lexema.includes(label)) {
+            console.log("entao true");
 				if(functionTokenList.length > (i + 1)) {
-					if (tokenSymbols["identificador"] == (functionTokenList[i + 1]._symbol)) {
+					if (tokenSymbols["identificador"] === (functionTokenList[i + 1][0]._symbol)) {
 						conditionalThenReturn = true;
 						auxToken = functionTokenList[i + 1];
 					}	
 				} else {
-					lineWithoutReturn = functionTokenList[i]._line;
+					lineWithoutReturn = functionTokenList[i][0]._line;
 				}
 				thenPosition = i;
-			}  else if (tokenSymbols["senao"] == (functionTokenList[i]._symbol) 
-					&& functionTokenList[i]._lexema.includes(label)) {
+			}  else if (tokenSymbols["senao"] === (functionTokenList[i][0]._symbol) 
+					&& (functionTokenList[i][0]._lexema).includes(label)) {
 				if(functionTokenList.length > (i + 1)) {
-					if (tokenSymbols["identificador"] == (functionTokenList[i + 1]._symbol)) {
+					if (tokenSymbols["identificador"] === (functionTokenList[i + 1][0]._symbol)) {
 						conditionalElseReturn = true;
 						elsePosition = i + 1;
 						auxToken = functionTokenList[i + 1];
 					} 	
 				} else {
-					lineWithoutReturn = functionTokenList[i]._line;
+					lineWithoutReturn = functionTokenList[i][0]._line;
 					elsePosition = i;
 				}
 				
 			}
 		}
 		
-		if(elsePosition == (-1)) elsePosition = functionTokenList.length - 1;
-		
+    if(elsePosition == (-1)) elsePosition = functionTokenList.length - 1;
+    console.log("aqui");
+		console.log(functionTokenList);
 		removeIf(elsePosition, thenPosition, (conditionalThenReturn && conditionalElseReturn), auxToken);
 	}
 	
 	function  thisFunctionHasReturn(nameOfFunction) {
 		let aux = 0;
-		
+		console.log(functionTokenList);
 		for(let i = 0 ; i < functionTokenList.length; i++ ) {
-			if (nameOfFunction == (functionTokenList[i]._lexema)) {
+      console.log("nameOfFunction: "+nameOfFunction);
+      console.log(functionTokenList[i][0]._lexema);
+			if (nameOfFunction === (functionTokenList[i][0]._lexema)) {
 				aux++;
-				if (aux == functionTokenList.length) {
+				if (aux === functionTokenList.length) {
 					return true;
 				}
 			}	
 		}
-		
-		
-
 		error = true;
-		if (lineWithoutReturn != 0)	line = lineWithoutReturn;
+		if (lineWithoutReturn != 0)	{
+      line = lineWithoutReturn;
+    }
 		
 		throw "Nem todos os caminhos possíveis da função possuem retorno." + "\nLinha: " + line;
 	}
 	
 	function removeIf(start,end,functionReturn, tokenFunction) {
 		for(let i = start; i >= end; i--) {
-			functionTokenList.pop(i);
+			functionTokenList.splice(i,1);
 		}
 		
 		if(functionReturn && tokenFunction != null) {
@@ -1751,10 +1815,6 @@ function analyzeSyntactic(file)  {
 	function clearFunctionList() {
 		functionTokenList = [];
   }
-  
-	function setLine(line) {
-		this.line = line;
-	}
   
 }
 
