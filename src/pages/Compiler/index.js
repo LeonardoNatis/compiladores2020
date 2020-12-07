@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { Button } from "../../React components/Button";
 import "../../React components/Button.css";
+import Editor from "../../React components/Editor/Editor";
 
 import Upload from "../../services/upload";
 
@@ -9,7 +10,7 @@ import { myFile } from "../../components/File";
 import { analyzeSyntactic } from "../../components/syntacticAnalizer";
 
 export default function Compiler() {
-  const [code, setCode] = useState([]);
+  const [code, setCode] = useState('');
   console.log(code);
   const onChangeFile = (file) => {
     setCode(file.toString());
@@ -23,13 +24,18 @@ export default function Compiler() {
     // printTokenList(lexicTokens);
     // console.log(fileObj);
     const syntacticResult = analyzeSyntactic(fileObj);
-
-    
   };
 
   return (
     <>
       <h1>Compiler</h1>
+      <br />
+      <br />
+      <Editor
+        language='javascript'
+        value={code}
+        onChange={setCode}
+      />
       <br />
       <Button>
         <Upload onChangefile={onChangeFile} />
@@ -38,7 +44,7 @@ export default function Compiler() {
       <br />
       <Button type="button" onClick={runLexicAnalyser}>
         {" "}
-        Analise Syntactic{" "}
+        Compile{" "}
       </Button>
     </>
   );

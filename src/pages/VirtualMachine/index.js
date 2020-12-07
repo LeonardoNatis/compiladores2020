@@ -5,7 +5,7 @@ import { Button } from '../../React components/Button';
 import Upload from "../../services/upload";
 import { tokenMachine } from '../../components/Token';
 
-export default function VirtualMachine2() {
+export default function VirtualMachine() {
     const [instruction, setInstruction] = useState([]);
     const [memory, setMemory] = useState([]);
     
