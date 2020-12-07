@@ -7,7 +7,6 @@ import Upload from "../../services/upload";
 
 import { analyseLexic, printTokenList } from "../../components/lexicAnalyzer";
 import { myFile } from "../../components/File";
-// import { lexicTest } from '../../components/lexicTest';
 import { analyzeSyntactic } from "../../components/syntacticAnalizer";
 
 export default function Compiler() {
