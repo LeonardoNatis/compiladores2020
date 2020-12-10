@@ -80,7 +80,6 @@ const tokenMachine = {
     NEG : "NEG",
     LDC : "LDC",
     RETURN : "RETURN",
-    RETURNF : "RETURNF",
     START : "START",
     HLT : "HLT",
     JMP : "JMP",

@@ -49,7 +49,7 @@ function analyzeSyntactic(file)  {
 		//////console.log(variableOfAlloc)
     createCode_2(tokenMachine["ALLOC"], variableOfAlloc[variableOfAlloc.length - 1]);
     position++;
-    //insertReturnFunction(0)
+
     //createCode_2(tokenMachine["ALLOC"], 1);
     // se token.simbolo = sidentificador
     if (currentToken[0]._symbol === tokenSymbols["identificador"]) {
@@ -771,17 +771,6 @@ function analyzeSyntactic(file)  {
 		nameOfFunction.pop(nameOfFunction.length - 1);
     createCode_3(tokenMachine["RETURN"],tokenMachine["EMPTY"] ,tokenMachine["EMPTY"]);
 
-
-		
-		// if(variableOfAlloc[variableOfAlloc.length - 1] > 0) {
-		// 	position = position - variableOfAlloc[variableOfAlloc.length - 1];
-		// 	createCode_2(tokenMachine["RETURNF"], -1);
-		// 	variableOfAlloc.pop(variableOfAlloc.length - 1);
-		// }
-		// else {
-		// 	createCode_2(tokenMachine["RETURNF"], 0);
-		// 	variableOfAlloc.pop(variableOfAlloc.length - 1);
-		// }
 		clearFunctionList();
 
   }
@@ -1133,11 +1122,6 @@ function analyzeSyntactic(file)  {
 		tableOfSymbols.push({lexema: token[0]._lexema,closed: false,type: null,label: -1,position: position, token: 'variavel'});
   }
   
-  function insertReturnFunction(position) {
-    ////////console.log(token)
-    ////////console.log(position)
-		tableOfSymbols.push({lexema: null,closed: false,type: null,label: null,position: position, token: null});
-	}
 
 	// Tipo Função
 	function insertTypeOnFunction(type) {

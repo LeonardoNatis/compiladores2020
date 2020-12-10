@@ -113,10 +113,6 @@ export default function VirtualMachine() {
                     RETURN();
                     indexInstruction = indexInstruction - 1;
                     break;
-                case "RETURNF":
-                    RETURNF();
-                    indexInstruction = indexInstruction - 1;
-                    break;
                 default:
                     break;
             }
