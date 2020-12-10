@@ -380,10 +380,10 @@ export default function VirtualMachine() {
         console.log(instruction[indexInstruction].arg1);
         //console.log(findLabel(instruction[indexInstruction].arg1));
         indexInstruction = findLabel(instruction[indexInstruction].arg1).line;
-        console.log(indexInstruction);
-        console.log("Executando: "+op.name);
-        console.log("Posicao: "+pos);
-        console.log(memory);
+        // console.log(indexInstruction);
+        // console.log("Executando: "+op.name);
+        // console.log("Posicao: "+pos);
+        // console.log(memory);
     }
     
     function RETURN() {
@@ -392,28 +392,6 @@ export default function VirtualMachine() {
         console.log("Executando: "+op.name);
         console.log("Posicao: "+pos);
         console.log(memory); 
-    }
-
-    function RETURNF() {
-        if (instruction[indexInstruction].arg2 != 0) {
-            let retorno = pos;
-            pos--;
-            DALLOC();
-            pos++;
-            memory[pos] = memory[pos - 1];
-            memory[pos - 1] = memory[retorno];
-        } else {
-            DALLOC();
-            if (instruction[indexInstruction].arg2 != 1) {
-                let aux = memory[pos];
-                memory[pos] = memory[pos - 1];
-                memory[pos - 1] = aux;
-            }
-        } 
-        RETURN();
-        console.log("Executando: "+op.name);
-        console.log("Posicao: "+pos);
-        console.log(memory);
     }
 
     function findLabel(label) {
