@@ -13,15 +13,11 @@ export default function VirtualMachine() {
         setMem(memory);
     },[]);
 
-    let value ;
-    
-    let file = [];
     let memory = [];
     let pos = -1;
     let indexInstruction = 0;
     let op = '';
     let exec = true;
-    let numInstrucao = 1;
 
     const compila = () => {
         while (exec) {
@@ -126,7 +122,6 @@ export default function VirtualMachine() {
             setMem(memory);
         }
     };
-
 
     function LDC(constant) {
         console.log(constant);
@@ -583,7 +578,7 @@ export default function VirtualMachine() {
             <h1>Virtual Machine</h1>
 
             <br />
-            <div className="instrucoes">
+            <div className="divTabela">
                 <p>Instruções a serem executadas pela VM</p>
                 <br />
                 <table className="tabela">
@@ -601,7 +596,7 @@ export default function VirtualMachine() {
                     </tbody>
                 </table>
             </div>
-            <div className="pilha">
+            <div className="divTabela">
                 <p>Conteúdo da Pilha</p>
                 <br />
                 <table className="tabela">
@@ -623,7 +618,7 @@ export default function VirtualMachine() {
                     <Upload onChangefile={onChangeFile} />
                 </Button>
                 <Button onClick={compila}>Execute All</Button>
-                <Button>Execute One</Button>
+                <Button onClick={executeOne}>Execute One</Button>
             </div>
         </>
     );

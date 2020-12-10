@@ -8,3 +8,19 @@
 .container {
   height: 100%;
 }
+
+.content {
+  margin: 10px;
+}
+
+.divTabela {
+  float: left;
+  margin-left: 4%;
+  margin-top: 10px;
+}
+
+.buttonDiv {
+  display: flex;
+  position: relative;
+  bottom: 40%;
+}
