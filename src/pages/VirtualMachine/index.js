@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 
 import { Button } from '../../React components/Button';
@@ -7,6 +7,12 @@ import { tokenMachine } from '../../components/Token';
 
 export default function VirtualMachine() {
     const [instruction, setInstruction] = useState([]);
+    const [mem, setMem] = useState([]);
+
+    useEffect( () => {
+        setMem(memory);
+    },[]);
+
     let value ;
     
     let file = [];
@@ -116,6 +122,8 @@ export default function VirtualMachine() {
             }
             console.log("Somando + 1, para proxima posicao");
             indexInstruction = indexInstruction + 1;
+
+            setMem(memory);
         }
     };
 
@@ -524,8 +532,8 @@ export default function VirtualMachine() {
     const renderMemory = (memory, index) => {
         return (
             <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{memory.value}</td>
+                <td>{index}</td>
+                <td>{memory}</td>
             </tr>
         )
     };
@@ -604,7 +612,7 @@ export default function VirtualMachine() {
                         </tr>
                     </thead>
                     <tbody>
-                        {memory.map(renderMemory)}
+                        {mem.map(renderMemory)}
                     </tbody>
                 </table>
             </div>
